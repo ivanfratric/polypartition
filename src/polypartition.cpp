@@ -118,7 +118,12 @@ void TPPLPoly::Invert() {
 TPPLPoint TPPLPartition::Normalize(const TPPLPoint &p) {
 	TPPLPoint r;
 	tppl_float n = sqrt(p.x*p.x + p.y*p.y);
-	if(n!=0) r = p/n;
+	if(n!=0) {
+		r = p/n;
+	} else {
+		r.x = 0;
+		r.y = 0;
+	}
 	return r;
 }
 
@@ -218,6 +223,11 @@ int TPPLPartition::RemoveHoles(list<TPPLPoly> *inpolys, list<TPPLPoly> *outpolys
 			if(iter->IsHole()) continue;
 			for(i=0; i < iter->GetNumPoints(); i++) {
 				if(iter->GetPoint(i).x <= holepoint.x) continue;
+				if(!InCone(iter->GetPoint((i+iter->GetNumPoints()-1)%(iter->GetNumPoints())),
+					iter->GetPoint(i),
+					iter->GetPoint((i+1)%(iter->GetNumPoints())),
+					holepoint)) 
+					continue;
 				polypoint = iter->GetPoint(i);
 				if(pointfound) {
 					v1 = Normalize(polypoint-holepoint);
