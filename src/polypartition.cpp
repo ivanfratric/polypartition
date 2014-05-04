@@ -1128,6 +1128,7 @@ int TPPLPartition::MonotonePartition(list<TPPLPoly> *inpolys, list<TPPLPoly> *mo
 	set<ScanLineEdge>::iterator *edgeTreeIterators,edgeIter;
 	edgeTreeIterators = new set<ScanLineEdge>::iterator[maxnumvertices];
 	pair<set<ScanLineEdge>::iterator,bool> edgeTreeRet;
+	for(i = 0; i<numvertices; i++) edgeTreeIterators[i] = edgeTree.end();
 
 	//for each vertex
 	for(i=0;i<numvertices;i++) {
@@ -1153,13 +1154,8 @@ int TPPLPartition::MonotonePartition(list<TPPLPoly> *inpolys, list<TPPLPoly> *mo
 				//if helper(ei-1) is a merge vertex
 				if(vertextypes[helpers[v->previous]]==TPPL_VERTEXTYPE_MERGE) {
 					//Insert the diagonal connecting vi to helper(ei-1) in D.
-					AddDiagonal(vertices,&newnumvertices,vindex,helpers[v->previous]);
-					vertextypes[newnumvertices-2] = vertextypes[vindex];
-					edgeTreeIterators[newnumvertices-2] = edgeTreeIterators[vindex];
-					helpers[newnumvertices-2] = helpers[vindex];
-					vertextypes[newnumvertices-1] = vertextypes[helpers[v->previous]];
-					edgeTreeIterators[newnumvertices-1] = edgeTreeIterators[helpers[v->previous]];
-					helpers[newnumvertices-1] = helpers[helpers[v->previous]];
+					AddDiagonal(vertices,&newnumvertices,vindex,helpers[v->previous], 
+						vertextypes, edgeTreeIterators, &edgeTree, helpers);
 				}
 				//Delete ei-1 from T
 				edgeTree.erase(edgeTreeIterators[v->previous]);
@@ -1176,13 +1172,8 @@ int TPPLPartition::MonotonePartition(list<TPPLPoly> *inpolys, list<TPPLPoly> *mo
 				}
 				edgeIter--;
 				//Insert the diagonal connecting vi to helper(ej) in D.
-				AddDiagonal(vertices,&newnumvertices,vindex,helpers[edgeIter->index]);
-				vertextypes[newnumvertices-2] = vertextypes[vindex];
-				edgeTreeIterators[newnumvertices-2] = edgeTreeIterators[vindex];
-				helpers[newnumvertices-2] = helpers[vindex];
-				vertextypes[newnumvertices-1] = vertextypes[helpers[edgeIter->index]];
-				edgeTreeIterators[newnumvertices-1] = edgeTreeIterators[helpers[edgeIter->index]];
-				helpers[newnumvertices-1] = helpers[helpers[edgeIter->index]];
+				AddDiagonal(vertices,&newnumvertices,vindex,helpers[edgeIter->index],
+					vertextypes, edgeTreeIterators, &edgeTree, helpers);
 				vindex2 = newnumvertices-2;
 				v2 = &(vertices[vindex2]);
 				//helper(e j)�vi
@@ -1200,13 +1191,8 @@ int TPPLPartition::MonotonePartition(list<TPPLPoly> *inpolys, list<TPPLPoly> *mo
 				//if helper(ei-1) is a merge vertex
 				if(vertextypes[helpers[v->previous]]==TPPL_VERTEXTYPE_MERGE) {
 					//Insert the diagonal connecting vi to helper(ei-1) in D.
-					AddDiagonal(vertices,&newnumvertices,vindex,helpers[v->previous]);
-					vertextypes[newnumvertices-2] = vertextypes[vindex];
-					edgeTreeIterators[newnumvertices-2] = edgeTreeIterators[vindex];
-					helpers[newnumvertices-2] = helpers[vindex];
-					vertextypes[newnumvertices-1] = vertextypes[helpers[v->previous]];
-					edgeTreeIterators[newnumvertices-1] = edgeTreeIterators[helpers[v->previous]];
-					helpers[newnumvertices-1] = helpers[helpers[v->previous]];
+					AddDiagonal(vertices,&newnumvertices,vindex,helpers[v->previous],
+						vertextypes, edgeTreeIterators, &edgeTree, helpers);
 					vindex2 = newnumvertices-2;
 					v2 = &(vertices[vindex2]);
 				}
@@ -1224,13 +1210,8 @@ int TPPLPartition::MonotonePartition(list<TPPLPoly> *inpolys, list<TPPLPoly> *mo
 				//if helper(ej) is a merge vertex
 				if(vertextypes[helpers[edgeIter->index]]==TPPL_VERTEXTYPE_MERGE) {
 					//Insert the diagonal connecting vi to helper(e j) in D.
-					AddDiagonal(vertices,&newnumvertices,vindex2,helpers[edgeIter->index]);
-					vertextypes[newnumvertices-2] = vertextypes[vindex2];
-					edgeTreeIterators[newnumvertices-2] = edgeTreeIterators[vindex2];
-					helpers[newnumvertices-2] = helpers[vindex2];
-					vertextypes[newnumvertices-1] = vertextypes[helpers[edgeIter->index]];
-					edgeTreeIterators[newnumvertices-1] = edgeTreeIterators[helpers[edgeIter->index]];
-					helpers[newnumvertices-1] = helpers[helpers[edgeIter->index]];
+					AddDiagonal(vertices,&newnumvertices,vindex2,helpers[edgeIter->index],
+						vertextypes, edgeTreeIterators, &edgeTree, helpers);
 				}
 				//helper(e j)�vi
 				helpers[edgeIter->index] = vindex2;
@@ -1242,13 +1223,8 @@ int TPPLPartition::MonotonePartition(list<TPPLPoly> *inpolys, list<TPPLPoly> *mo
 					//if helper(ei-1) is a merge vertex
 					if(vertextypes[helpers[v->previous]]==TPPL_VERTEXTYPE_MERGE) {
 						//Insert the diagonal connecting vi to helper(ei-1) in D.
-						AddDiagonal(vertices,&newnumvertices,vindex,helpers[v->previous]);
-						vertextypes[newnumvertices-2] = vertextypes[vindex];
-						edgeTreeIterators[newnumvertices-2] = edgeTreeIterators[vindex];
-						helpers[newnumvertices-2] = helpers[vindex];
-						vertextypes[newnumvertices-1] = vertextypes[helpers[v->previous]];
-						edgeTreeIterators[newnumvertices-1] = edgeTreeIterators[helpers[v->previous]];
-						helpers[newnumvertices-1] = helpers[helpers[v->previous]];
+						AddDiagonal(vertices,&newnumvertices,vindex,helpers[v->previous],
+							vertextypes, edgeTreeIterators, &edgeTree, helpers);
 						vindex2 = newnumvertices-2;
 						v2 = &(vertices[vindex2]);
 					}
@@ -1274,13 +1250,8 @@ int TPPLPartition::MonotonePartition(list<TPPLPoly> *inpolys, list<TPPLPoly> *mo
 					//if helper(ej) is a merge vertex
 					if(vertextypes[helpers[edgeIter->index]]==TPPL_VERTEXTYPE_MERGE) {
 						//Insert the diagonal connecting vi to helper(e j) in D.
-						AddDiagonal(vertices,&newnumvertices,vindex,helpers[edgeIter->index]);
-						vertextypes[newnumvertices-2] = vertextypes[vindex];
-						edgeTreeIterators[newnumvertices-2] = edgeTreeIterators[vindex];
-						helpers[newnumvertices-2] = helpers[vindex];
-						vertextypes[newnumvertices-1] = vertextypes[helpers[edgeIter->index]];
-						edgeTreeIterators[newnumvertices-1] = edgeTreeIterators[helpers[edgeIter->index]];
-						helpers[newnumvertices-1] = helpers[helpers[edgeIter->index]];
+						AddDiagonal(vertices,&newnumvertices,vindex,helpers[edgeIter->index],
+							vertextypes, edgeTreeIterators, &edgeTree, helpers);
 					}
 					//helper(e j)�vi
 					helpers[edgeIter->index] = vindex;
@@ -1340,7 +1311,10 @@ int TPPLPartition::MonotonePartition(list<TPPLPoly> *inpolys, list<TPPLPoly> *mo
 }
 
 //adds a diagonal to the doubly-connected list of vertices
-void TPPLPartition::AddDiagonal(MonotoneVertex *vertices, long *numvertices, long index1, long index2) {
+void TPPLPartition::AddDiagonal(MonotoneVertex *vertices, long *numvertices, long index1, long index2, 
+								char *vertextypes, set<ScanLineEdge>::iterator *edgeTreeIterators, 
+								set<ScanLineEdge> *edgeTree, long *helpers) 
+{
 	long newindex1,newindex2;
 
 	newindex1 = *numvertices;
@@ -1362,6 +1336,18 @@ void TPPLPartition::AddDiagonal(MonotoneVertex *vertices, long *numvertices, lon
 
 	vertices[index2].next = newindex1;
 	vertices[newindex1].previous = index2;
+
+	//update all relevant structures
+	vertextypes[newindex1] = vertextypes[index1];
+	edgeTreeIterators[newindex1] = edgeTreeIterators[index1];
+	helpers[newindex1] = helpers[index1];
+	if(edgeTreeIterators[newindex1] != edgeTree->end())
+		edgeTreeIterators[newindex1]->index = newindex1;
+	vertextypes[newindex2] = vertextypes[index2];
+	edgeTreeIterators[newindex2] = edgeTreeIterators[index2];
+	helpers[newindex2] = helpers[index2];
+	if(edgeTreeIterators[newindex2] != edgeTree->end())
+		edgeTreeIterators[newindex2]->index = newindex2;
 }
 
 bool TPPLPartition::Below(TPPLPoint &p1, TPPLPoint &p2) {
