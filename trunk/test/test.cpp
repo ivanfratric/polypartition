@@ -18,9 +18,11 @@
 //OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 //THE SOFTWARE.
 
+#define _CRT_SECURE_NO_WARNINGS
 
 #include <stdio.h>
 #include <list>
+#include <limits>
 
 using namespace std;
 
@@ -109,7 +111,7 @@ void WritePoly(const char *filename, TPPLPoly *poly) {
 void WritePolyList(FILE *fp, list<TPPLPoly> *polys) {
 	list<TPPLPoly>::iterator iter;
 
-	fprintf(fp,"%d\n",polys->size());
+	fprintf(fp,"%ld\n",polys->size());
 
 	for(iter = polys->begin(); iter != polys->end(); iter++) {
 		WritePoly(fp,&(*iter));
@@ -126,14 +128,37 @@ void WritePolyList(const char *filename, list<TPPLPoly> *polys) {
 	fclose(fp);	
 }
 
-void DrawPoly(Image *img, TPPLPoly *poly) {
-	TPPLPoint p1,p2;
+void DrawPoly(Image *img, TPPLPoly *poly, tppl_float xmin, tppl_float xmax, tppl_float ymin, tppl_float ymax) {
+	TPPLPoint p1,p2,p1img,p2img,polymin,imgmin;
 	long i;
 	Image::Pixel color={0,0,0};
+
+	polymin.x = xmin;
+	polymin.y = ymin;
+	imgmin.x = 5;
+	imgmin.y = 5;
+
+	tppl_float polySizeX = xmax - xmin;
+	tppl_float polySizeY = ymax - ymin;
+	tppl_float imgSizeX = (tppl_float)img->GetWidth()-10;
+	tppl_float imgSizeY = (tppl_float)img->GetHeight()-10;
+	
+	tppl_float scalex = 0;	
+	tppl_float scaley = 0;
+	tppl_float scale;
+	if(polySizeX>0) scalex = imgSizeX/polySizeX;
+	if(polySizeY>0) scaley = imgSizeY/polySizeY;
+
+	if(scalex>0 && scalex<scaley) scale = scalex;
+	else if(scaley>0) scale = scaley;
+	else scale = 1;
+
 	for(i=0;i<poly->GetNumPoints();i++) {
 		p1 = poly->GetPoint(i);
 		p2 = poly->GetPoint((i+1)%poly->GetNumPoints());
-		img->DrawLine((int)p1.x,(int)p1.y,(int)p2.x,(int)p2.y,color);
+		p1img = (p1 - polymin)*scale + imgmin;
+		p2img = (p2 - polymin)*scale + imgmin;
+		img->DrawLine((int)p1img.x,(int)p1img.y,(int)p2img.x,(int)p2img.y,color);
 	}
 }
 
@@ -143,7 +168,18 @@ void DrawPoly(const char *filename, TPPLPoly *poly) {
 	img.Clear(white);
 	ImageIO io;
 
-	DrawPoly(&img,poly);
+	tppl_float xmin = std::numeric_limits<tppl_float>::max();
+	tppl_float xmax = std::numeric_limits<tppl_float>::min();
+	tppl_float ymin = std::numeric_limits<tppl_float>::max();
+	tppl_float ymax = std::numeric_limits<tppl_float>::min();
+	for(int i=0;i<poly->GetNumPoints();i++) {
+		if(poly->GetPoint(i).x < xmin) xmin = poly->GetPoint(i).x;
+		if(poly->GetPoint(i).x > xmax) xmax = poly->GetPoint(i).x;
+		if(poly->GetPoint(i).y < ymin) ymin = poly->GetPoint(i).y;
+		if(poly->GetPoint(i).y > ymax) ymax = poly->GetPoint(i).y;
+	}
+
+	DrawPoly(&img, poly, xmin, xmax, ymin, ymax);
 
 	io.SaveImage(filename,&img);
 }
@@ -156,8 +192,25 @@ void DrawPolyList(const char *filename, list<TPPLPoly> *polys) {
 	ImageIO io;
 	list<TPPLPoly>::iterator iter;
 
+	tppl_float xmin = std::numeric_limits<tppl_float>::max();
+	tppl_float xmax = std::numeric_limits<tppl_float>::min();
+	tppl_float ymin = std::numeric_limits<tppl_float>::max();
+	tppl_float ymax = std::numeric_limits<tppl_float>::min();
 	for(iter=polys->begin(); iter!=polys->end(); iter++) {
-		DrawPoly(&img,&(*iter));
+		for(int i=0;i<iter->GetNumPoints();i++) {
+			if(iter->GetPoint(i).x < xmin) xmin = iter->GetPoint(i).x;
+			if(iter->GetPoint(i).x > xmax) xmax = iter->GetPoint(i).x;
+			if(iter->GetPoint(i).y < ymin) ymin = iter->GetPoint(i).y;
+			if(iter->GetPoint(i).y > ymax) ymax = iter->GetPoint(i).y;
+		}
+		//if(iter->GetOrientation() == TPPL_CCW) printf("CCW\n");
+		//else if (iter->GetOrientation() == TPPL_CW) printf("CW\n");
+		//else printf("gfdgdg\n");
+	}
+	//printf("\n");
+
+	for(iter=polys->begin(); iter!=polys->end(); iter++) {
+		DrawPoly(&img, &(*iter), xmin, xmax, ymin, ymax);
 	}
 
 	io.SaveImage(filename,&img);
@@ -228,7 +281,18 @@ void GenerateTestData() {
 	WritePolyList("test_convexpartition_OPT.txt",&result);
 }
 
-int main()
+int main() {
+	TPPLPartition pp;
+	list<TPPLPoly> testpolys,result;
+
+	ReadPolyList("failing_mono_clean - copy.txt",&testpolys);
+	DrawPolyList("test.bmp", &testpolys);
+	if(!pp.Triangulate_MONO(&testpolys,&result)) printf("Error\n");
+	DrawPolyList("test2.bmp", &result);
+
+}
+
+/*int main()
 {
 	TPPLPartition pp;
 	
@@ -292,5 +356,5 @@ int main()
 	}
 
 	return 0;
-}
+}*/
 
