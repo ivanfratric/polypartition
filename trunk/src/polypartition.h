@@ -223,8 +223,8 @@ struct TPPLPoint {
         //helper functions for MonotonePartition
         bool Below(TPPLPoint &p1, TPPLPoint &p2);
         void AddDiagonal(MonotoneVertex *vertices, long *numvertices, long index1, long index2,
-			char *vertextypes, std::set<ScanLineEdge>::iterator *edgeTreeIterators,
-			std::set<ScanLineEdge> *edgeTree, long *helpers);
+            char *vertextypes, std::set<ScanLineEdge>::iterator *edgeTreeIterators,
+            std::set<ScanLineEdge> *edgeTree, long *helpers);
         
         //triangulates a monotone polygon, used in Triangulate_MONO
         int TriangulateMonotone(TPPLPoly *inPoly, std::list<TPPLPoly> *triangles);
