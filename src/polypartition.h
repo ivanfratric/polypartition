@@ -33,6 +33,9 @@ typedef double tppl_float;
 struct TPPLPoint {
     tppl_float x;
     tppl_float y;
+    // User-specified vertex identifier.  Note that this isn't used internally
+    // by the library, but will be faithfully copied around.
+    int id;
     
     TPPLPoint operator + (const TPPLPoint& p) const {
         TPPLPoint r;
