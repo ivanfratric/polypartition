@@ -76,6 +76,8 @@ TPPLPoly::TPPLPoly(const TPPLPoly &src) {
 }
 
 TPPLPoly& TPPLPoly::operator=(const TPPLPoly &src) {
+   if(this == &src)
+      return *this;
    Clear();
    hole = src.hole;
    numpoints = src.numpoints;
