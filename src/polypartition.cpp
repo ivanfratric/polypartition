@@ -344,7 +344,6 @@ void TPPLPartition::UpdateVertexReflexity(PartitionVertex *v) {
 }
 
 void TPPLPartition::UpdateVertex(PartitionVertex *v, PartitionVertex *vertices, long numvertices) {
-   long i;
    PartitionVertex *v1,*v3;
    TPPLPoint vec1,vec3;
 
@@ -359,7 +358,7 @@ void TPPLPartition::UpdateVertex(PartitionVertex *v, PartitionVertex *vertices, 
 
    if(v->isConvex) {
       v->isEar = true;
-      for(i=0;i<numvertices;++i) {
+      for(long i=0;i<numvertices;++i) {
          if((vertices[i].p.x==v->p.x)&&(vertices[i].p.y==v->p.y)) continue;
          if((vertices[i].p.x==v1->p.x)&&(vertices[i].p.y==v1->p.y)) continue;
          if((vertices[i].p.x==v3->p.x)&&(vertices[i].p.y==v3->p.y)) continue;
