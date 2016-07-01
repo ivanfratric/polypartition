@@ -1412,6 +1412,7 @@ int TPPLPartition::TriangulateMonotone(TPPLPoly *inPoly, list<TPPLPoly> *triangl
    if(numpoints < 3) return 0;
    if(numpoints == 3) {
       triangles->push_back(*inPoly);
+      return 1;
    }
 
    topindex = 0; bottomindex=0;
