@@ -25,6 +25,7 @@
 
 #include <list>
 #include <set>
+#include <cassert>
 
 typedef double tppl_float;
 
@@ -105,6 +106,7 @@ class TPPLPoly {
       }
 
       TPPLPoint &GetPoint(long i) {
+         assert( i < GetNumPoints() );
          return points[i];
       }
 
@@ -113,6 +115,7 @@ class TPPLPoly {
       }
 
       TPPLPoint& operator[] (int i) {
+         assert( i < GetNumPoints() );
          return points[i];
       }
 
