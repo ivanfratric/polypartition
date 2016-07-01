@@ -1,4 +1,6 @@
 //Copyright (C) 2011 by Ivan Fratric
+//Copyright (C) 2016 CERN
+//@author Michele Castellana <michele.castellana@cern.ch>
 //
 //Permission is hereby granted, free of charge, to any person obtaining a copy
 //of this software and associated documentation files (the "Software"), to deal
@@ -68,8 +70,7 @@ struct TPPLPoint {
    }
 
    bool operator!=(const TPPLPoint& p) const {
-      if((x == p.x)&&(y==p.y)) return false;
-      else return true;
+      return !((*this)==p);
    }
 };
 
