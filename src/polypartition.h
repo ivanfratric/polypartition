@@ -203,35 +203,35 @@ class TPPLPartition {
       };
 
       //standard helper functions
-      bool IsConvex(TPPLPoint& p1, TPPLPoint& p2, TPPLPoint& p3);
-      bool IsReflex(TPPLPoint& p1, TPPLPoint& p2, TPPLPoint& p3);
-      bool IsInside(TPPLPoint& p1, TPPLPoint& p2, TPPLPoint& p3, TPPLPoint &p);
+      static bool IsConvex(TPPLPoint& p1, TPPLPoint& p2, TPPLPoint& p3);
+      static bool IsReflex(TPPLPoint& p1, TPPLPoint& p2, TPPLPoint& p3);
+      static bool IsInside(TPPLPoint& p1, TPPLPoint& p2, TPPLPoint& p3, TPPLPoint &p);
 
-      bool InCone(TPPLPoint &p1, TPPLPoint &p2, TPPLPoint &p3, TPPLPoint &p);
-      bool InCone(PartitionVertex *v, TPPLPoint &p);
+      static bool InCone(TPPLPoint &p1, TPPLPoint &p2, TPPLPoint &p3, TPPLPoint &p);
+      static bool InCone(PartitionVertex *v, TPPLPoint &p);
 
-      int Intersects(TPPLPoint &p11, TPPLPoint &p12, TPPLPoint &p21, TPPLPoint &p22);
+      static int Intersects(TPPLPoint &p11, TPPLPoint &p12, TPPLPoint &p21, TPPLPoint &p22);
 
-      TPPLPoint Normalize(const TPPLPoint &p);
-      tppl_float Distance(const TPPLPoint &p1, const TPPLPoint &p2);
+      static TPPLPoint Normalize(const TPPLPoint &p);
+      static tppl_float Distance(const TPPLPoint &p1, const TPPLPoint &p2);
 
       //helper functions for Triangulate_EC
-      void UpdateVertexReflexity(PartitionVertex *v);
-      void UpdateVertex(PartitionVertex *v,PartitionVertex *vertices, long numvertices);
+      static void UpdateVertexReflexity(PartitionVertex *v);
+      static void UpdateVertex(PartitionVertex *v,PartitionVertex *vertices, long numvertices);
 
       //helper functions for ConvexPartition_OPT
-      void UpdateState(long a, long b, long w, long i, long j, DPState2 **dpstates);
-      void TypeA(long i, long j, long k, PartitionVertex *vertices, DPState2 **dpstates);
-      void TypeB(long i, long j, long k, PartitionVertex *vertices, DPState2 **dpstates);
+      static void UpdateState(long a, long b, long w, long i, long j, DPState2 **dpstates);
+      static void TypeA(long i, long j, long k, PartitionVertex *vertices, DPState2 **dpstates);
+      static void TypeB(long i, long j, long k, PartitionVertex *vertices, DPState2 **dpstates);
 
       //helper functions for MonotonePartition
-      bool Below(TPPLPoint &p1, TPPLPoint &p2);
-      void AddDiagonal(MonotoneVertex *vertices, long *numvertices, long index1, long index2,
+      static bool Below(TPPLPoint &p1, TPPLPoint &p2);
+      static void AddDiagonal(MonotoneVertex *vertices, long *numvertices, long index1, long index2,
             char *vertextypes, std::set<ScanLineEdge>::iterator *edgeTreeIterators,
             std::set<ScanLineEdge> *edgeTree, long *helpers);
 
       //triangulates a monotone polygon, used in Triangulate_MONO
-      int TriangulateMonotone(TPPLPoly *inPoly, std::list<TPPLPoly> *triangles);
+      static int TriangulateMonotone(TPPLPoly *inPoly, std::list<TPPLPoly> *triangles);
 
    public:
 
@@ -245,7 +245,7 @@ class TPPLPartition {
       //             vertices of all hole polys have to be in clockwise order
       //   outpolys : a list of polygons without holes
       //returns 1 on success, 0 on failure
-      int RemoveHoles(std::list<TPPLPoly> *inpolys, std::list<TPPLPoly> *outpolys);
+      static int RemoveHoles(std::list<TPPLPoly> *inpolys, std::list<TPPLPoly> *outpolys);
 
       //triangulates a polygon by ear clipping
       //time complexity O(n^2), n is the number of vertices
@@ -255,7 +255,7 @@ class TPPLPartition {
       //          vertices have to be in counter-clockwise order
       //   triangles : a list of triangles (result)
       //returns 1 on success, 0 on failure
-      int Triangulate_EC(TPPLPoly *poly, std::list<TPPLPoly> *triangles);
+      static int Triangulate_EC(TPPLPoly *poly, std::list<TPPLPoly> *triangles);
 
       //triangulates a list of polygons that may contain holes by ear clipping algorithm
       //first calls RemoveHoles to get rid of the holes, and then Triangulate_EC for each resulting polygon
@@ -267,7 +267,7 @@ class TPPLPartition {
       //             vertices of all hole polys have to be in clockwise order
       //   triangles : a list of triangles (result)
       //returns 1 on success, 0 on failure
-      int Triangulate_EC(std::list<TPPLPoly> *inpolys, std::list<TPPLPoly> *triangles);
+      static int Triangulate_EC(std::list<TPPLPoly> *inpolys, std::list<TPPLPoly> *triangles);
 
       //creates an optimal polygon triangulation in terms of minimal edge length
       //time complexity: O(n^3), n is the number of vertices
@@ -277,7 +277,7 @@ class TPPLPartition {
       //          vertices have to be in counter-clockwise order
       //   triangles : a list of triangles (result)
       //returns 1 on success, 0 on failure
-      int Triangulate_OPT(TPPLPoly *poly, std::list<TPPLPoly> *triangles);
+      static int Triangulate_OPT(TPPLPoly *poly, std::list<TPPLPoly> *triangles);
 
       //triangulates a polygons by firstly partitioning it into monotone polygons
       //time complexity: O(n*log(n)), n is the number of vertices
@@ -287,7 +287,7 @@ class TPPLPartition {
       //          vertices have to be in counter-clockwise order
       //   triangles : a list of triangles (result)
       //returns 1 on success, 0 on failure
-      int Triangulate_MONO(TPPLPoly *poly, std::list<TPPLPoly> *triangles);
+      static int Triangulate_MONO(TPPLPoly *poly, std::list<TPPLPoly> *triangles);
 
       //triangulates a list of polygons by firstly partitioning them into monotone polygons
       //time complexity: O(n*log(n)), n is the number of vertices
@@ -298,7 +298,7 @@ class TPPLPartition {
       //             vertices of all hole polys have to be in clockwise order
       //   triangles : a list of triangles (result)
       //returns 1 on success, 0 on failure
-      int Triangulate_MONO(std::list<TPPLPoly> *inpolys, std::list<TPPLPoly> *triangles);
+      static int Triangulate_MONO(std::list<TPPLPoly> *inpolys, std::list<TPPLPoly> *triangles);
 
       //creates a monotone partition of a list of polygons that can contain holes
       //time complexity: O(n*log(n)), n is the number of vertices
@@ -309,7 +309,7 @@ class TPPLPartition {
       //             vertices of all hole polys have to be in clockwise order
       //   monotonePolys : a list of monotone polygons (result)
       //returns 1 on success, 0 on failure
-      int MonotonePartition(std::list<TPPLPoly> *inpolys, std::list<TPPLPoly> *monotonePolys);
+      static int MonotonePartition(std::list<TPPLPoly> *inpolys, std::list<TPPLPoly> *monotonePolys);
 
       //partitions a polygon into convex polygons by using Hertel-Mehlhorn algorithm
       //the algorithm gives at most four times the number of parts as the optimal algorithm
@@ -322,7 +322,7 @@ class TPPLPartition {
       //          vertices have to be in counter-clockwise order
       //   parts : resulting list of convex polygons
       //returns 1 on success, 0 on failure
-      int ConvexPartition_HM(TPPLPoly *poly, std::list<TPPLPoly> *parts);
+      static int ConvexPartition_HM(TPPLPoly *poly, std::list<TPPLPoly> *parts);
 
       //partitions a list of polygons into convex parts by using Hertel-Mehlhorn algorithm
       //the algorithm gives at most four times the number of parts as the optimal algorithm
@@ -336,7 +336,7 @@ class TPPLPartition {
       //             vertices of all hole polys have to be in clockwise order
       //   parts : resulting list of convex polygons
       //returns 1 on success, 0 on failure
-      int ConvexPartition_HM(std::list<TPPLPoly> *inpolys, std::list<TPPLPoly> *parts);
+      static int ConvexPartition_HM(std::list<TPPLPoly> *inpolys, std::list<TPPLPoly> *parts);
 
       //optimal convex partitioning (in terms of number of resulting convex polygons)
       //using the Keil-Snoeyink algorithm
@@ -347,7 +347,7 @@ class TPPLPartition {
       //          vertices have to be in counter-clockwise order
       //   parts : resulting list of convex polygons
       //returns 1 on success, 0 on failure
-      int ConvexPartition_OPT(TPPLPoly *poly, std::list<TPPLPoly> *parts);
+      static int ConvexPartition_OPT(TPPLPoly *poly, std::list<TPPLPoly> *parts);
 };
 
 
