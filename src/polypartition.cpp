@@ -104,7 +104,7 @@ void TPPLPoly::SetOrientation(int orientation) {
 
 void TPPLPoly::Invert() {
 	long i;
-	TPPLPoint *invpoints;
+	TPPLPoint *invpoints = NULL;
 
 	invpoints = new TPPLPoint[numpoints];
 	for(i=0;i<numpoints;i++) {
@@ -113,6 +113,10 @@ void TPPLPoly::Invert() {
 
 	delete [] points;
 	points = invpoints;
+}
+
+TPPLPartition::PartitionVertex::PartitionVertex() : previous(NULL), next(NULL) {
+
 }
 
 TPPLPoint TPPLPartition::Normalize(const TPPLPoint &p) {
@@ -333,7 +337,7 @@ bool TPPLPartition::InCone(PartitionVertex *v, TPPLPoint &p) {
 }
 
 void TPPLPartition::UpdateVertexReflexity(PartitionVertex *v) {
-	PartitionVertex *v1,*v3;
+	PartitionVertex *v1 = NULL,*v3 = NULL;
 	v1 = v->previous;
 	v3 = v->next;
 	v->isConvex = !IsReflex(v1->p,v->p,v3->p);	
@@ -341,7 +345,7 @@ void TPPLPartition::UpdateVertexReflexity(PartitionVertex *v) {
 
 void TPPLPartition::UpdateVertex(PartitionVertex *v, PartitionVertex *vertices, long numvertices) {
 	long i;
-	PartitionVertex *v1,*v3;
+	PartitionVertex *v1 = NULL,*v3 = NULL;
 	TPPLPoint vec1,vec3;
 
 	v1 = v->previous;
@@ -372,8 +376,8 @@ void TPPLPartition::UpdateVertex(PartitionVertex *v, PartitionVertex *vertices, 
 //triangulation by ear removal
 int TPPLPartition::Triangulate_EC(TPPLPoly *poly, list<TPPLPoly> *triangles) {
 	long numvertices;
-	PartitionVertex *vertices;
-	PartitionVertex *ear;
+	PartitionVertex *vertices = NULL;
+	PartitionVertex *ear = NULL;
 	TPPLPoly triangle;
 	long i,j;
 	bool earfound;
@@ -458,7 +462,7 @@ int TPPLPartition::Triangulate_EC(list<TPPLPoly> *inpolys, list<TPPLPoly> *trian
 int TPPLPartition::ConvexPartition_HM(TPPLPoly *poly, list<TPPLPoly> *parts) {
 	list<TPPLPoly> triangles;
 	list<TPPLPoly>::iterator iter1,iter2;
-	TPPLPoly *poly1,*poly2;
+	TPPLPoly *poly1 = NULL,*poly2 = NULL;
 	TPPLPoly newpoly;
 	TPPLPoint d1,d2,p1,p2,p3;
 	long i11,i12,i21,i22,i13,i23,j,k;
@@ -571,7 +575,7 @@ int TPPLPartition::ConvexPartition_HM(list<TPPLPoly> *inpolys, list<TPPLPoly> *p
 //O(n^2) space complexity
 int TPPLPartition::Triangulate_OPT(TPPLPoly *poly, list<TPPLPoly> *triangles) {
 	long i,j,k,gap,n;
-	DPState **dpstates;
+	DPState **dpstates = NULL;
 	TPPLPoint p1,p2,p3,p4;
 	long bestvertex;
 	tppl_float weight,minweight,d1,d2;
@@ -701,7 +705,7 @@ int TPPLPartition::Triangulate_OPT(TPPLPoly *poly, list<TPPLPoly> *triangles) {
 
 void TPPLPartition::UpdateState(long a, long b, long w, long i, long j, DPState2 **dpstates) {
 	Diagonal newdiagonal;
-	list<Diagonal> *pairs;
+	list<Diagonal> *pairs = NULL;
 	long w2;
 
 	w2 = dpstates[a][b].weight;
@@ -723,7 +727,7 @@ void TPPLPartition::UpdateState(long a, long b, long w, long i, long j, DPState2
 }
 
 void TPPLPartition::TypeA(long i, long j, long k, PartitionVertex *vertices, DPState2 **dpstates) {
-	list<Diagonal> *pairs;
+	list<Diagonal> *pairs = NULL;
 	list<Diagonal>::iterator iter,lastiter;
 	long top;
 	long w;
@@ -754,7 +758,7 @@ void TPPLPartition::TypeA(long i, long j, long k, PartitionVertex *vertices, DPS
 }
 
 void TPPLPartition::TypeB(long i, long j, long k, PartitionVertex *vertices, DPState2 **dpstates) {
-	list<Diagonal> *pairs;
+	list<Diagonal> *pairs = NULL;
 	list<Diagonal>::iterator iter,lastiter;
 	long top;
 	long w;
@@ -789,12 +793,12 @@ void TPPLPartition::TypeB(long i, long j, long k, PartitionVertex *vertices, DPS
 
 int TPPLPartition::ConvexPartition_OPT(TPPLPoly *poly, list<TPPLPoly> *parts) {
 	TPPLPoint p1,p2,p3,p4;
-	PartitionVertex *vertices;
-	DPState2 **dpstates;
+	PartitionVertex *vertices = NULL;
+	DPState2 **dpstates = NULL;
 	long i,j,k,n,gap;
 	list<Diagonal> diagonals,diagonals2;
 	Diagonal diagonal,newdiagonal;
-	list<Diagonal> *pairs,*pairs2;
+	list<Diagonal> *pairs = NULL,*pairs2 = NULL;
 	list<Diagonal>::iterator iter,iter2;
 	int ret;
 	TPPLPoly newpoly;
@@ -1055,11 +1059,11 @@ int TPPLPartition::ConvexPartition_OPT(TPPLPoly *poly, list<TPPLPoly> *parts) {
 //by Mark de Berg, Otfried Cheong, Marc van Kreveld and Mark Overmars
 int TPPLPartition::MonotonePartition(list<TPPLPoly> *inpolys, list<TPPLPoly> *monotonePolys) {
 	list<TPPLPoly>::iterator iter;
-	MonotoneVertex *vertices;
+	MonotoneVertex *vertices = NULL;
 	long i,numvertices,vindex,vindex2,newnumvertices,maxnumvertices;
 	long polystartindex, polyendindex;
-	TPPLPoly *poly;
-	MonotoneVertex *v,*v2,*vprev,*vnext;
+	TPPLPoly *poly = NULL;
+	MonotoneVertex *v = NULL,*v2 = NULL,*vprev = NULL,*vnext = NULL;
 	ScanLineEdge newedge;
 	bool error = false;
 
@@ -1398,7 +1402,7 @@ bool TPPLPartition::ScanLineEdge::operator < (const ScanLineEdge & other) const 
 //O(n) time, O(n) space complexity
 int TPPLPartition::TriangulateMonotone(TPPLPoly *inPoly, list<TPPLPoly> *triangles) {
 	long i,i2,j,topindex,bottomindex,leftindex,rightindex,vindex;
-	TPPLPoint *points;
+	TPPLPoint *points = NULL;
 	long numpoints;
 	TPPLPoly triangle;
 
