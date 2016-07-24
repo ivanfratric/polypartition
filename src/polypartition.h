@@ -152,8 +152,8 @@ struct TPPLPoint {
             tppl_float angle;
             PartitionVertex *previous;
             PartitionVertex *next;
-
-			PartitionVertex();
+            
+            PartitionVertex();
         };
         
         struct MonotoneVertex {
