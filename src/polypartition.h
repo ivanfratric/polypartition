@@ -33,6 +33,9 @@ typedef double tppl_float;
 struct TPPLPoint {
     tppl_float x;
     tppl_float y;
+    // User-specified vertex identifier.  Note that this isn't used internally
+    // by the library, but will be faithfully copied around.
+    int id;
     
     TPPLPoint operator + (const TPPLPoint& p) const {
         TPPLPoint r;
@@ -71,10 +74,11 @@ struct TPPLPoint {
         if((x == p.x)&&(y==p.y)) return false;
         else return true;
     }
-    };
-    
-    //Polygon implemented as an array of points with a 'hole' flag
-    class TPPLPoly {
+};
+
+
+//Polygon implemented as an array of points with a 'hole' flag
+class TPPLPoly {
     protected:
         
         TPPLPoint *points;
@@ -139,9 +143,10 @@ struct TPPLPoint {
         //   TPPL_CCW : sets vertices in counter-clockwise order
         //   TPPL_CW : sets vertices in clockwise order
         void SetOrientation(int orientation);
-    };
-    
-    class TPPLPartition {
+};
+
+
+class TPPLPartition {
     protected:
         struct PartitionVertex {
             bool isActive;
@@ -344,7 +349,7 @@ struct TPPLPoint {
         //   parts : resulting list of convex polygons
         //returns 1 on success, 0 on failure
         int ConvexPartition_OPT(TPPLPoly *poly, std::list<TPPLPoly> *parts);
-    };
-    
-    
+};
+
+
 #endif
