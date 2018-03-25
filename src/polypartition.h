@@ -95,11 +95,11 @@ class TPPLPoly {
         TPPLPoly& operator=(const TPPLPoly &src);
         
         //getters and setters
-        long GetNumPoints() {
+        long GetNumPoints() const {
             return numpoints;
         }
         
-        bool IsHole() {
+        bool IsHole() const {
             return hole;
         }
         
@@ -116,6 +116,10 @@ class TPPLPoly {
         }
         
         TPPLPoint& operator[] (int i) {
+            return points[i];
+        }
+
+        const TPPLPoint& operator[] (int i) const {
             return points[i];
         }
         
@@ -136,7 +140,7 @@ class TPPLPoly {
         //   TPPL_CCW : polygon vertices are in counter-clockwise order
         //   TPPL_CW : polygon vertices are in clockwise order
         //       0 : the polygon has no (measurable) area
-        int GetOrientation();
+        int GetOrientation() const;
         
         //sets the polygon orientation
         //orientation can be
