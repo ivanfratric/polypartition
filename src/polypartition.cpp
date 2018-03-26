@@ -82,7 +82,7 @@ TPPLPoly& TPPLPoly::operator=(const TPPLPoly &src) {
 	return *this;
 }
 
-int TPPLPoly::GetOrientation() {
+int TPPLPoly::GetOrientation() const {
 	long i1,i2;
 	tppl_float area = 0;
 	for(i1=0; i1<numpoints; i1++) {
