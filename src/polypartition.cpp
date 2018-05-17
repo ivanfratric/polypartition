@@ -1155,6 +1155,10 @@ int TPPLPartition::MonotonePartition(list<TPPLPoly> *inpolys, list<TPPLPoly> *mo
 				break;
 
 			case TPPL_VERTEXTYPE_END:
+				if (edgeTreeIterators[v->previous] == edgeTree.end()) {
+					error = true;
+					break;
+				}
 				//if helper(ei-1) is a merge vertex
 				if(vertextypes[helpers[v->previous]]==TPPL_VERTEXTYPE_MERGE) {
 					//Insert the diagonal connecting vi to helper(ei-1) in D.
@@ -1192,6 +1196,10 @@ int TPPLPartition::MonotonePartition(list<TPPLPoly> *inpolys, list<TPPLPoly> *mo
 				break;
 
 			case TPPL_VERTEXTYPE_MERGE:
+				if (edgeTreeIterators[v->previous] == edgeTree.end()) {
+					error = true;
+					break;
+				}
 				//if helper(ei-1) is a merge vertex
 				if(vertextypes[helpers[v->previous]]==TPPL_VERTEXTYPE_MERGE) {
 					//Insert the diagonal connecting vi to helper(ei-1) in D.
@@ -1224,6 +1232,10 @@ int TPPLPartition::MonotonePartition(list<TPPLPoly> *inpolys, list<TPPLPoly> *mo
 			case TPPL_VERTEXTYPE_REGULAR:
 				//if the interior of P lies to the right of vi
 				if(Below(v->p,vertices[v->previous].p)) {
+					if (edgeTreeIterators[v->previous] == edgeTree.end()) {
+						error = true;
+						break;
+					}
 					//if helper(ei-1) is a merge vertex
 					if(vertextypes[helpers[v->previous]]==TPPL_VERTEXTYPE_MERGE) {
 						//Insert the diagonal connecting vi to helper(ei-1) in D.
