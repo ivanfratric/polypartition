@@ -390,7 +390,8 @@ int TPPLPartition::Triangulate_EC(TPPLPoly *poly, list<TPPLPoly> *triangles) {
 
 	numvertices = poly->GetNumPoints();
 
-	vertices = new PartitionVertex[numvertices];
+	partitionVertices.resize(numvertices);
+	vertices = partitionVertices.data();
 	for(i=0;i<numvertices;i++) {
 		vertices[i].isActive = true;
 		vertices[i].p = poly->GetPoint(i);
@@ -419,7 +420,6 @@ int TPPLPartition::Triangulate_EC(TPPLPoly *poly, list<TPPLPoly> *triangles) {
 			}
 		}
 		if(!earfound) {
-			delete [] vertices;
 			return 0;
 		}
 
@@ -442,8 +442,6 @@ int TPPLPartition::Triangulate_EC(TPPLPoly *poly, list<TPPLPoly> *triangles) {
 			break;
 		}
 	}
-
-	delete [] vertices;
 
 	return 1;
 }

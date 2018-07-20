@@ -23,6 +23,7 @@
 
 #include <list>
 #include <set>
+#include <vector>
 
 typedef double tppl_float;
 
@@ -240,6 +241,9 @@ class TPPLPartition {
         //triangulates a monotone polygon, used in Triangulate_MONO
         int TriangulateMonotone(TPPLPoly *inPoly, std::list<TPPLPoly> *triangles);
         
+        //temporary buffer used by Triangulate_EC
+        std::vector<PartitionVertex> partitionVertices;
+
     public:
         
         //simple heuristic procedure for removing holes from a list of polygons
