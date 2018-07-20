@@ -54,9 +54,14 @@ void TPPLPoly::Clear() {
 }
 
 void TPPLPoly::Init(long numpoints) {
-	Clear();
-	this->numpoints = numpoints;
-	points = new TPPLPoint[numpoints];
+	if (numpoints <= this->numpoints) {
+		hole = false;
+		this->numpoints = numpoints;
+	} else {
+		Clear();
+		this->numpoints = numpoints;
+		points = new TPPLPoint[numpoints];		
+	}
 }
 
 void TPPLPoly::Triangle(TPPLPoint &p1, TPPLPoint &p2, TPPLPoint &p3) {
