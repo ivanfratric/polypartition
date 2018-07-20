@@ -23,6 +23,7 @@
 
 #include <list>
 #include <set>
+#include <vector>
 
 typedef double tppl_float;
 
@@ -81,22 +82,20 @@ struct TPPLPoint {
 class TPPLPoly {
     protected:
         
-        TPPLPoint *points;
-        long numpoints;
+        std::vector<TPPLPoint> points;
         bool hole;
         
     public:
         
         //constructors/destructors
         TPPLPoly();
-        ~TPPLPoly();
         
         TPPLPoly(const TPPLPoly &src);
         TPPLPoly& operator=(const TPPLPoly &src);
         
         //getters and setters
         long GetNumPoints() const {
-            return numpoints;
+            return points.size();
         }
         
         bool IsHole() const {
@@ -116,7 +115,7 @@ class TPPLPoly {
         }
 
         TPPLPoint *GetPoints() {
-            return points;
+            return points.data();
         }
         
         TPPLPoint& operator[] (int i) {

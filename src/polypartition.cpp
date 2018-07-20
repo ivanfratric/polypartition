@@ -39,25 +39,15 @@ using namespace std;
 
 TPPLPoly::TPPLPoly() { 
 	hole = false;
-	numpoints = 0;
-	points = NULL;
-}
-
-TPPLPoly::~TPPLPoly() {
-	if(points) delete [] points;
 }
 
 void TPPLPoly::Clear() {
-	if(points) delete [] points;
-	hole = false;
-	numpoints = 0;
-	points = NULL;
+	Init(0);
 }
 
 void TPPLPoly::Init(long numpoints) {
-	Clear();
-	this->numpoints = numpoints;
-	points = new TPPLPoint[numpoints];
+	points.resize(numpoints);
+	hole = false;
 }
 
 void TPPLPoly::Triangle(TPPLPoint &p1, TPPLPoint &p2, TPPLPoint &p3) {
@@ -69,26 +59,21 @@ void TPPLPoly::Triangle(TPPLPoint &p1, TPPLPoint &p2, TPPLPoint &p3) {
 
 TPPLPoly::TPPLPoly(const TPPLPoly &src) {
 	hole = src.hole;
-	numpoints = src.numpoints;
-	points = new TPPLPoint[numpoints];
-	memcpy(points, src.points, numpoints*sizeof(TPPLPoint));
+	points = src.points;
 }
 
 TPPLPoly& TPPLPoly::operator=(const TPPLPoly &src) {
-	Clear();
 	hole = src.hole;
-	numpoints = src.numpoints;
-	points = new TPPLPoint[numpoints];
-	memcpy(points, src.points, numpoints*sizeof(TPPLPoint));
+	points = src.points;
 	return *this;
 }
 
 int TPPLPoly::GetOrientation() const {
 	long i1,i2;
 	tppl_float area = 0;
-	for(i1=0; i1<numpoints; i1++) {
+	for(i1=0; i1<points.size(); i1++) {
 		i2 = i1+1;
-		if(i2 == numpoints) i2 = 0;
+		if(i2 == points.size()) i2 = 0;
 		area += points[i1].x * points[i2].y - points[i1].y * points[i2].x;
 	}
 	if(area>0) return TPPL_CCW;
@@ -104,7 +89,7 @@ void TPPLPoly::SetOrientation(int orientation) {
 }
 
 void TPPLPoly::Invert() {
-	std::reverse(points, points + numpoints);
+	std::reverse(points.begin(), points.end());
 }
 
 TPPLPartition::PartitionVertex::PartitionVertex() : previous(NULL), next(NULL) {
