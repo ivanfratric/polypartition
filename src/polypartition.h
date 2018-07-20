@@ -111,6 +111,10 @@ class TPPLPoly {
             return points[i];
         }
         
+        const TPPLPoint &GetPoint(long i) const {
+            return points[i];
+        }
+
         TPPLPoint *GetPoints() {
             return points;
         }
