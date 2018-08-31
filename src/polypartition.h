@@ -152,8 +152,8 @@ class TPPLPoly {
         //   TPPL_CW : sets vertices in clockwise order
         void SetOrientation(int orientation);
 
-        //throws an exception if the polygon is invalid (n<3)
-        bool Valid() const;
+        //checks whether a polygon is valid or not
+        inline bool Valid() const { return this->numpoints >= 3; }
 };
 
 #ifdef TPPL_ALLOCATOR
