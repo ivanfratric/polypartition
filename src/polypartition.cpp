@@ -111,9 +111,8 @@ void TPPLPoly::SetOrientation(int orientation) {
 	}
 }
 
-void TPPLPoly::Validate() const {
-	if(this->numpoints < 3)
-		throw logic_error("polygon is not valid");
+bool TPPLPoly::Valid() const {
+	return this->numpoints >= 3;
 }
 
 void TPPLPoly::Invert() {
@@ -380,7 +379,7 @@ void TPPLPartition::UpdateVertex(PartitionVertex *v, PartitionVertex *vertices, 
 
 //triangulation by ear removal
 int TPPLPartition::Triangulate_EC(TPPLPoly *poly, TPPLPolyList *triangles) {
-	poly->Validate();
+	if(!poly->Valid()) return 0;
 
 	long numvertices;
 	PartitionVertex *vertices = NULL;
@@ -467,7 +466,7 @@ int TPPLPartition::Triangulate_EC(TPPLPolyList *inpolys, TPPLPolyList *triangles
 }
 
 int TPPLPartition::ConvexPartition_HM(TPPLPoly *poly, TPPLPolyList *parts) {
-	poly->Validate();
+	if(!poly->Valid()) return 0;
 	
 	TPPLPolyList triangles;
 	TPPLPolyList::iterator iter1,iter2;
@@ -583,7 +582,7 @@ int TPPLPartition::ConvexPartition_HM(TPPLPolyList *inpolys, TPPLPolyList *parts
 //O(n^3) time complexity
 //O(n^2) space complexity
 int TPPLPartition::Triangulate_OPT(TPPLPoly *poly, TPPLPolyList *triangles) {
-	poly->Validate();
+	if(!poly->Valid()) return 0;
 
 	long i,j,k,gap,n;
 	DPState **dpstates = NULL;
@@ -803,7 +802,7 @@ void TPPLPartition::TypeB(long i, long j, long k, PartitionVertex *vertices, DPS
 }
 
 int TPPLPartition::ConvexPartition_OPT(TPPLPoly *poly, TPPLPolyList *parts) {
-	poly->Validate();
+	if(!poly->Valid()) return 0;
 
 	TPPLPoint p1,p2,p3,p4;
 	PartitionVertex *vertices = NULL;
@@ -1082,7 +1081,7 @@ int TPPLPartition::MonotonePartition(TPPLPolyList *inpolys, TPPLPolyList *monoto
 
 	numvertices = 0;
 	for(iter = inpolys->begin(); iter != inpolys->end(); iter++) {
-		iter->Validate();
+		if(!iter->Valid()) return 0;
 		numvertices += iter->GetNumPoints();
 	}
 
@@ -1427,7 +1426,7 @@ bool TPPLPartition::ScanLineEdge::operator < (const ScanLineEdge & other) const 
 //triangulates monotone polygon
 //O(n) time, O(n) space complexity
 int TPPLPartition::TriangulateMonotone(TPPLPoly *inPoly, TPPLPolyList *triangles) {
-	inPoly->Validate();
+	if(!inPoly->Valid()) return 0;
 
 	long i,i2,j,topindex,bottomindex,leftindex,rightindex,vindex;
 	TPPLPoint *points = NULL;
