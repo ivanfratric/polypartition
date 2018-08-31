@@ -151,6 +151,9 @@ class TPPLPoly {
         //   TPPL_CCW : sets vertices in counter-clockwise order
         //   TPPL_CW : sets vertices in clockwise order
         void SetOrientation(int orientation);
+
+        //checks whether a polygon is valid or not
+        inline bool Valid() const { return this->numpoints >= 3; }
 };
 
 #ifdef TPPL_ALLOCATOR
