@@ -111,10 +111,6 @@ void TPPLPoly::SetOrientation(int orientation) {
 	}
 }
 
-bool TPPLPoly::Valid() const {
-	return this->numpoints >= 3;
-}
-
 void TPPLPoly::Invert() {
 	std::reverse(points, points + numpoints);
 }

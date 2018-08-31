@@ -153,7 +153,7 @@ class TPPLPoly {
         void SetOrientation(int orientation);
 
         //throws an exception if the polygon is invalid (n<3)
-        bool Valid() const;
+        inline bool Valid() const { return this->numpoints >= 3; }
 };
 
 #ifdef TPPL_ALLOCATOR
