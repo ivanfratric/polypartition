@@ -31,7 +31,7 @@ typedef double tppl_float;
 #define TPPL_CW -1
 
 #define FP_EPS std::numeric_limits<double>::epsilon()
-#define FP_EQ(x,y) (((x) - (y)) >= -FP_EPS && ((x) - (y)) <= FP_EPS)
+#define FP_EQ(x,y) (((x) - (y)) > -FP_EPS && ((x) - (y)) < FP_EPS)
 
 //2D point structure
 struct TPPLPoint {
