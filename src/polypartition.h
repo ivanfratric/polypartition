@@ -23,11 +23,15 @@
 
 #include <list>
 #include <set>
+#include <limits>
 
 typedef double tppl_float;
 
 #define TPPL_CCW 1
 #define TPPL_CW -1
+
+#define FP_EPS std::numeric_limits<double>::epsilon()
+#define FP_EQ(x,y) (((x) - (y)) > -FP_EPS && ((x) - (y)) < FP_EPS)
 
 //2D point structure
 struct TPPLPoint {
@@ -66,13 +70,11 @@ struct TPPLPoint {
     }
     
     bool operator==(const TPPLPoint& p) const {
-        if((x == p.x)&&(y==p.y)) return true;
-        else return false;
+        return FP_EQ(x, p.x) && FP_EQ(y, p.y);
     }
     
     bool operator!=(const TPPLPoint& p) const {
-        if((x == p.x)&&(y==p.y)) return false;
-        else return true;
+        return !(p == *this);
     }
 };
 

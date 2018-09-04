@@ -122,7 +122,7 @@ TPPLPartition::PartitionVertex::PartitionVertex() : previous(NULL), next(NULL) {
 TPPLPoint TPPLPartition::Normalize(const TPPLPoint &p) {
 	TPPLPoint r;
 	tppl_float n = sqrt(p.x*p.x + p.y*p.y);
-	if(n!=0) {
+	if(!FP_EQ(n, 0)) {
 		r = p/n;
 	} else {
 		r.x = 0;
@@ -140,10 +140,10 @@ tppl_float TPPLPartition::Distance(const TPPLPoint &p1, const TPPLPoint &p2) {
 
 //checks if two lines intersect
 int TPPLPartition::Intersects(TPPLPoint &p11, TPPLPoint &p12, TPPLPoint &p21, TPPLPoint &p22) {
-	if((p11.x == p21.x)&&(p11.y == p21.y)) return 0;
-	if((p11.x == p22.x)&&(p11.y == p22.y)) return 0;
-	if((p12.x == p21.x)&&(p12.y == p21.y)) return 0;
-	if((p12.x == p22.x)&&(p12.y == p22.y)) return 0;
+	if(FP_EQ(p11.x, p21.x) && FP_EQ(p11.y, p21.y)) return 0;
+	if(FP_EQ(p11.x, p22.x) && FP_EQ(p11.y, p22.y)) return 0;
+	if(FP_EQ(p12.x, p21.x) && FP_EQ(p12.y, p21.y)) return 0;
+	if(FP_EQ(p12.x, p22.x) && FP_EQ(p12.y, p22.y)) return 0;
 
 	TPPLPoint v1ort,v2ort,v;
 	tppl_float dot11,dot12,dot21,dot22;
@@ -360,9 +360,9 @@ void TPPLPartition::UpdateVertex(PartitionVertex *v, PartitionVertex *vertices, 
 	if(v->isConvex) {
 		v->isEar = true;
 		for(i=0;i<numvertices;i++) {
-			if((vertices[i].p.x==v->p.x)&&(vertices[i].p.y==v->p.y)) continue;
-			if((vertices[i].p.x==v1->p.x)&&(vertices[i].p.y==v1->p.y)) continue;
-			if((vertices[i].p.x==v3->p.x)&&(vertices[i].p.y==v3->p.y)) continue;
+			if(FP_EQ(vertices[i].p.x, v->p.x) && FP_EQ(vertices[i].p.y, v->p.y)) continue;
+			if(FP_EQ(vertices[i].p.x, v1->p.x) && FP_EQ(vertices[i].p.y, v1->p.y)) continue;
+			if(FP_EQ(vertices[i].p.x, v3->p.x) && FP_EQ(vertices[i].p.y, v3->p.y)) continue;
 			if(IsInside(v1->p,v->p,v3->p,vertices[i].p)) {
 				v->isEar = false;
 				break;
@@ -505,9 +505,9 @@ int TPPLPartition::ConvexPartition_HM(TPPLPoly *poly, TPPLPolyList *parts) {
 				poly2 = &(*iter2);
 
 				for(i21=0;i21<poly2->GetNumPoints();i21++) {
-					if((d2.x != poly2->GetPoint(i21).x)||(d2.y != poly2->GetPoint(i21).y)) continue;
+					if(!FP_EQ(d2.x, poly2->GetPoint(i21).x) || FP_EQ(d2.y, poly2->GetPoint(i21).y)) continue;
 					i22 = (i21+1)%(poly2->GetNumPoints());
-					if((d1.x != poly2->GetPoint(i22).x)||(d1.y != poly2->GetPoint(i22).y)) continue;
+					if(!FP_EQ(d1.x, poly2->GetPoint(i22).x) || !FP_EQ(d1.y, poly2->GetPoint(i22).y)) continue;
 					isdiagonal = true;
 					break;
 				}
@@ -1377,7 +1377,7 @@ void TPPLPartition::AddDiagonal(MonotoneVertex *vertices, long *numvertices, lon
 
 bool TPPLPartition::Below(TPPLPoint &p1, TPPLPoint &p2) {
 	if(p1.y < p2.y) return true;
-	else if(p1.y == p2.y) {
+	else if(FP_EQ(p1.y, p2.y)) {
 		if(p1.x < p2.x) return true;
 	}
 	return false;
@@ -1386,7 +1386,7 @@ bool TPPLPartition::Below(TPPLPoint &p1, TPPLPoint &p2) {
 //sorts in the falling order of y values, if y is equal, x is used instead
 bool TPPLPartition::VertexSorter::operator() (long index1, long index2) {
 	if(vertices[index1].p.y > vertices[index2].p.y) return true;
-	else if(vertices[index1].p.y == vertices[index2].p.y) {
+	else if(FP_EQ(vertices[index1].p.y, vertices[index2].p.y)) {
 		if(vertices[index1].p.x > vertices[index2].p.x) return true;
 	}
 	return false;
@@ -1400,14 +1400,14 @@ bool TPPLPartition::ScanLineEdge::IsConvex(const TPPLPoint& p1, const TPPLPoint&
 }
 
 bool TPPLPartition::ScanLineEdge::operator < (const ScanLineEdge & other) const {
-	if(other.p1.y == other.p2.y) {
-		if(p1.y == p2.y) {
+	if(FP_EQ(other.p1.y, other.p2.y)) {
+		if(FP_EQ(p1.y, p2.y)) {
 			if(p1.y < other.p1.y) return true;
 			else return false;
 		}
 		if(IsConvex(p1,p2,other.p1)) return true;
 		else return false;
-	} else if(p1.y == p2.y) {
+	} else if(FP_EQ(p1.y, p2.y)) {
 		if(IsConvex(other.p1,other.p2,p1)) return false;
 		else return true;	
 	} else if(p1.y < other.p1.y) {
