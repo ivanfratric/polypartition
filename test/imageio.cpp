@@ -126,7 +126,6 @@ void ImageIO::LoadImageBMP(const char *filename, Image *image) {
 	image->data = (unsigned char *)malloc(image->height * image->width * 3);
 
 	if(bpp == 8) {
-
 		//bytes per row
 		long bpr,tmp;
 		tmp = image->width % 4;
@@ -146,7 +145,6 @@ void ImageIO::LoadImageBMP(const char *filename, Image *image) {
 		long pos = 0;
 		for(long i=0;i<image->height;i++) {
 			for(long j=0;j<image->width;j++) {
-				
 				image->SetPixelGray(j,image->height - i - 1,buffer[pos]);
 				pos++;
 			}
@@ -156,7 +154,6 @@ void ImageIO::LoadImageBMP(const char *filename, Image *image) {
 		free(buffer);
 
 	} else if (bpp == 24) {
-
 		//bytes per row
 		long bpr,tmp;
 		tmp = (image->width*3) % 4;
@@ -184,7 +181,7 @@ void ImageIO::LoadImageBMP(const char *filename, Image *image) {
 			pos += tmp;
 		}
 
-		free(buffer);	
+		free(buffer);
 	}
 
 	fclose(fp);
@@ -301,7 +298,7 @@ void ImageIO::LoadImagePPM(const char *filename, Image *image) {
 	char id[1024];
 	long sizex, sizey, levels;
 	sscanf((char *)buffer,"%s\n%ld %ld\n%ld\n",id,&sizex,&sizey,&levels);
-	
+
 	if((strncmp(id,"P6",2)!=0)||(levels!=255)) {
 		free(buffer);
 		fclose(fp);
@@ -349,7 +346,7 @@ void ImageIO::LoadImagePGM(const char *filename, Image *image) {
 	char id[1024];
 	long sizex, sizey, levels;
 	sscanf((char *)buffer,"%s\n%ld %ld\n%ld\n",id,&sizex,&sizey,&levels);
-	
+
 	if((strncmp(id,"P5",2)!=0)||(levels!=255)) {
 		free(buffer);
 		fclose(fp);
@@ -384,7 +381,7 @@ void ImageIO::SaveImagePPM(const char *filename, Image *image) {
 	}
 
 	fprintf(fp,"P6\n%ld %ld\n255\n",image->width,image->height);
-	
+
 	long sizex = image->width;
 	long sizey = image->height;
 	unsigned char *buffer = (unsigned char *)malloc(image->width * image->height * 3);
@@ -412,7 +409,7 @@ void ImageIO::SaveImagePGM(const char *filename, Image *image) {
 	}
 
 	fprintf(fp,"P5\n%ld %ld\n255\n",image->width,image->height);
-	
+
 	long sizex = image->width;
 	long sizey = image->height;
 	unsigned char *buffer = (unsigned char *)malloc(image->width * image->height);
@@ -439,14 +436,14 @@ void ImageIO::LoadImageRAW(const char *filename, Image *image, long width, long 
 	if((width==0)||(height==0)) {
 		long filesize;
 		fseek(fp,0,SEEK_END);
-		filesize = ftell(fp);	
+		filesize = ftell(fp);
 		fseek(fp,0,SEEK_SET);
 		width = (long)sqrt((double)filesize);
 		height = width;
 		if((height*width)!=filesize) {
 			fclose(fp);
 			printf("Error loading image %s, wrong file format!\n",filename);
-			return;	
+			return;
 		}
 	}
 
@@ -480,7 +477,7 @@ void ImageIO::SaveImageRAW(const char *filename, Image *image) {
 	long sizex = image->width;
 	long sizey = image->height;
 	unsigned char *buffer = (unsigned char *)malloc(image->width * image->height);
-	
+
 	long pos = 0;
 	for(long i = 0; i < sizey;i++) {
 		for(long j = 0; j < sizex;j++) {

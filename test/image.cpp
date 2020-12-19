@@ -216,7 +216,7 @@ Image Image::Resize(int factor) {
 			miny = i*factor;
 			maxx = minx+factor;
 			maxy = miny+factor;
-			
+
 			sumR = 0; sumG = 0; sumB = 0;
 
 			for(i2=miny;i2<maxy;i2++) {

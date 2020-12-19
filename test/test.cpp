@@ -55,7 +55,7 @@ void ReadPoly(const char *filename, TPPLPoly *poly) {
 		return;
 	}
 	ReadPoly(fp,poly);
-	fclose(fp);	
+	fclose(fp);
 }
 
 void ReadPolyList(FILE *fp, list<TPPLPoly> *polys) {
@@ -86,7 +86,7 @@ void WritePoly(FILE *fp, TPPLPoly *poly) {
 	numpoints = poly->GetNumPoints();
 
 	fprintf(fp,"%d\n",numpoints);
-	
+
 	if(poly->IsHole()) {
 		fprintf(fp,"1\n");
 	} else {
@@ -105,7 +105,7 @@ void WritePoly(const char *filename, TPPLPoly *poly) {
 		return;
 	}
 	WritePoly(fp,poly);
-	fclose(fp);	
+	fclose(fp);
 }
 
 void WritePolyList(FILE *fp, list<TPPLPoly> *polys) {
@@ -125,7 +125,7 @@ void WritePolyList(const char *filename, list<TPPLPoly> *polys) {
 		return;
 	}
 	WritePolyList(fp,polys);
-	fclose(fp);	
+	fclose(fp);
 }
 
 void DrawPoly(Image *img, TPPLPoly *poly, tppl_float xmin, tppl_float xmax, tppl_float ymin, tppl_float ymax) {
@@ -142,8 +142,8 @@ void DrawPoly(Image *img, TPPLPoly *poly, tppl_float xmin, tppl_float xmax, tppl
 	tppl_float polySizeY = ymax - ymin;
 	tppl_float imgSizeX = (tppl_float)img->GetWidth()-10;
 	tppl_float imgSizeY = (tppl_float)img->GetHeight()-10;
-	
-	tppl_float scalex = 0;	
+
+	tppl_float scalex = 0;
 	tppl_float scaley = 0;
 	tppl_float scale;
 	if(polySizeX>0) scalex = imgSizeX/polySizeX;
@@ -242,7 +242,7 @@ bool ComparePoly(list<TPPLPoly> *polys1, list<TPPLPoly> *polys2) {
 
 void GenerateTestData() {
 	TPPLPartition pp;
-	
+
 	list<TPPLPoly> testpolys,result,expectedResult;
 
 	ReadPolyList("test_input.txt",&testpolys);
@@ -289,13 +289,12 @@ int main() {
 	DrawPolyList("test.bmp", &testpolys);
 	if(!pp.Triangulate_MONO(&testpolys,&result)) printf("Error\n");
 	DrawPolyList("test2.bmp", &result);
-
 }
 
 /*int main()
 {
 	TPPLPartition pp;
-	
+
 	list<TPPLPoly> testpolys,result,expectedResult;
 
 	ReadPolyList("test_input.txt",&testpolys);

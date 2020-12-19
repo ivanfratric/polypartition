@@ -80,17 +80,17 @@ public:
 
 	//returns the mean value of pixel intensity
 	unsigned char GetMeanGray();
-	
+
 	//computes the histogram of image intensity and returns it via histogram parameter
 	//parameters:
 	//		histogram : an array of 256 components, used to return the histogram
 	void GetHistogramGray(long *histogram);
-	
+
 	//binarizes the image
 	//all pixels with the intensity lower than threshold become black
 	//all others become white
 	void Binarize(unsigned char threshold);
-	
+
 	//flips the image in horizontal direction
 	void FlipHorizontal();
 

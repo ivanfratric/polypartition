@@ -46,7 +46,7 @@ public:
 
 	//loads the image of the specified format (imageType) from filename into image
 	void LoadImage(const char *filename, Image *image, int imageType);
-	
+
 	//saves the image into file named 'filename'
 	//automatically determines the image format
 	void SaveImage(const char *filename, Image *image);
