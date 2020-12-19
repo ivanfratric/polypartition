@@ -77,5 +77,3 @@ Quality of solution: Optimal. A minimum number of convex polygons is produced
 Example:
 
 ![https://raw.githubusercontent.com/ivanfratric/polypartition/master/images/conv_opt.png](https://raw.githubusercontent.com/ivanfratric/polypartition/master/images/conv_opt.png)
-
-
