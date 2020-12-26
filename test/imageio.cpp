@@ -33,7 +33,7 @@
 #include "imageio.h"
 
 const char *ImageIO::GetFileExtension(const char *filename) {
-  //first remove the folder if present
+  // First remove the folder if present.
   const char *filename2, *tmp, *extension;
   filename2 = strrchr(filename, '/');
   tmp = strrchr(filename, '\\');
@@ -43,7 +43,7 @@ const char *ImageIO::GetFileExtension(const char *filename) {
   if (!filename2) {
     filename2 = filename;
   }
-  //now find the dot
+  // Now find the dot.
   extension = strrchr(filename2, '.');
   if (extension) {
     extension++;
@@ -139,7 +139,7 @@ void ImageIO::LoadImageBMP(const char *filename, Image *image) {
   image->data = (unsigned char *)malloc(image->height * image->width * 3);
 
   if (bpp == 8) {
-    //bytes per row
+    // Bytes per row.
     long bpr, tmp;
     tmp = image->width % 4;
     if (tmp == 0) {
@@ -166,7 +166,7 @@ void ImageIO::LoadImageBMP(const char *filename, Image *image) {
     free(buffer);
 
   } else if (bpp == 24) {
-    //bytes per row
+    // Bytes per row.
     long bpr, tmp;
     tmp = (image->width * 3) % 4;
     if (tmp == 0) {
@@ -236,12 +236,11 @@ void ImageIO::SaveImageBMP(const char *filename, Image *image) {
   long tmpl;
   short tmps;
 
-  //header
+  // Header.
   header[0] = 'B';
   header[1] = 'M';
   fwrite(header, 2, 1, fp);
 
-  //filesize;
   long rowsize;
   long tmp = (image->width * 3) % 4;
   if (tmp == 0) {
@@ -257,15 +256,15 @@ void ImageIO::SaveImageBMP(const char *filename, Image *image) {
   fwrite(&tmps, 2, 1, fp);
   fwrite(&tmps, 2, 1, fp);
 
-  //offset to the beginning of bm data
+  // Offset to the beginning of BMP data.
   tmpl = 54;
   fwrite(&tmpl, 4, 1, fp);
 
-  //info header size
+  // Info header size.
   tmpl = 40;
   fwrite(&tmpl, 4, 1, fp);
 
-  //size
+  // Size.
   tmpl = image->width;
   fwrite(&tmpl, 4, 1, fp);
   tmpl = image->height;
@@ -273,7 +272,7 @@ void ImageIO::SaveImageBMP(const char *filename, Image *image) {
 
   tmps = 1;
   fwrite(&tmps, 2, 1, fp);
-  tmps = 24; //bpp
+  tmps = 24; // Bits per pixel (bpp).
   fwrite(&tmps, 2, 1, fp);
   tmpl = 0;
   fwrite(&tmpl, 4, 1, fp);
@@ -283,7 +282,7 @@ void ImageIO::SaveImageBMP(const char *filename, Image *image) {
   fwrite(&tmpl, 4, 1, fp);
   fwrite(&tmpl, 4, 1, fp);
 
-  //actual bitmap data
+  // Actual bitmap data.
   for (long i = 0; i < image->height; i++) {
     memset(row, 0, rowsize);
     memcpy(row, image->data + (3 * image->width) * (image->height - i - 1), 3 * image->width);

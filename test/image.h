@@ -23,7 +23,7 @@
 
 #pragma once
 
-//a simple image class with some (very basic) image processing operations
+// A simple image class with some (very basic) image processing operations.
 class Image {
   friend class ImageIO;
 
@@ -42,23 +42,23 @@ class Image {
     unsigned char R;
   };
 
-  //constructors/destructor
+  // Constructors and destructor.
   Image(void);
   Image(long width, long height);
   Image(const Image &src);
   Image &operator=(const Image &src);
   ~Image(void);
 
-  //initializes the image of specified width and height
-  //all pixels are set to black
+  // Initializes the image of specified width and height.
+  // All pixels are set to black.
   void Init(long width, long height);
 
-  //property getters
+  // Property getters.
   long GetWidth();
   long GetHeight();
   unsigned char *GetData();
 
-  //pixel getters and setters
+  // Pixel getters and setters.
   unsigned char GetPixelGray(long x, long y);
   unsigned char GetPixelRed(long x, long y);
   unsigned char GetPixelGreen(long x, long y);
@@ -70,66 +70,68 @@ class Image {
   void SetPixelGreen(long x, long y, unsigned char c);
   void SetPixelBlue(long x, long y, unsigned char c);
 
-  //returns the color of a pixel at real coordinates (x,y)
-  //using bilinear interpolation
+  // Returns the color of a pixel at real coordinates (x, y)
+  // using bilinear interpolation.
   Image::Pixel GetPixelBilinear(float x, float y);
 
-  /////////////////////////////////////////
-  //some basic image processing functions//
-  /////////////////////////////////////////
+  // Some basic image processing functions.
 
-  //returns the mean value of pixel intensity
+  // Returns the mean value of pixel intensity.
   unsigned char GetMeanGray();
 
-  //computes the histogram of image intensity and returns it via histogram parameter
-  //parameters:
-  //		histogram : an array of 256 components, used to return the histogram
+  // Computes the histogram of image intensity
+  // and returns it via histogram parameter.
+  // params:
+  //    histogram:
+  //       An array of 256 components, used to return the histogram.
   void GetHistogramGray(long *histogram);
 
-  //binarizes the image
-  //all pixels with the intensity lower than threshold become black
-  //all others become white
+  // Binarizes the image (posterize with two levels). All pixels with the
+  // intensity lower than threshold become black, and all others become white.
   void Binarize(unsigned char threshold);
 
-  //flips the image in horizontal direction
+  // Flips the image in horizontal direction.
   void FlipHorizontal();
 
-  //flips the image in vertical direction
+  // Flips the image in vertical direction.
   void FlipVertical();
 
-  //inverts image colors
+  // inverts image colors
   void Invert();
 
-  //crops the image
-  //returns the subimage with upper left corner at (posx,posy)
-  //the returned image is of size (width, height)
+  // Crops the image. Returns the sub-image with upper left corner at
+  // (posx, posy) with the size of (width, height).
   Image Crop(int posx, int posy, int width, int height);
 
-  //resizes the image for a intager facor
-  //for example, if factor is 2, returns the image with size (width/2, height/2)
-  //each pixel in a new image is obtained as an average of corresponding pixels in the original image
+  // Resizes the image by an integer factor.
+  // For example, if factor is 2, returns the image with size
+  // (width/2, height/2). Each pixel in a new image is obtained as
+  // an average of corresponding pixels in the original image.
   Image Resize(int factor);
 
-  //computes the convolution of image and a filter
-  //parameters
-  //		filter : an filterwidth x filterheight array containing the filter coefficients
-  //		filterwidth : width of the filter
-  //		filterheight : height of the filter
-  //		zero : a value that will be added to each pixel component after filtering, 0 by default
+  // Computes the convolution of image and a filter.
+  // params:
+  //    filter:
+  //       An array containing the filter coefficients.
+  //    filterwidth:
+  //       The width of the filter array.
+  //    filterheight:
+  //       The height of the filter array.
   Image Filter(float *filter, long filterwidth, long filterheight);
 
-  //filters the image using Gaussian blur
-  //parameters
-  //		sigma : the standard deviation of the Gaussian filter
-  //		masksize : the size of the corresponding filter
-  //				   if set to 0, the masksize will be calculated as sigma*2*2+1
+  // Filters the image using Gaussian blur.
+  // params:
+  //    sigma:
+  //       The standard deviation of the Gaussian filter.
+  //    masksize:
+  //       The size of the corresponding filter.
+  //       If set to 0, the masksize will be calculated as sigma * 2 * 2 + 1.
   Image GaussBlur(float sigma, long masksize = 0);
 
-  //paints the whole image with color 'color'
+  // Paints the whole image with the given color.
   void Clear(Pixel color);
 
-  //draws a line from point (x1,y1) to point (x2,y2)
-  //the line is in color 'color'
+  // Draws a line from point (x1, y1) to point (x2, y2) in the given color.
   void DrawLine(int x1, int y1, int x2, int y2, Pixel color);
 };
 
