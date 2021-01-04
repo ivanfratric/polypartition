@@ -1,0 +1,51 @@
+name: 🐧 Linux Builds
+on: [push, pull_request]
+
+jobs:
+  linux-gcc:
+    runs-on: "ubuntu-20.04"
+    name: Compile and Test (GCC)
+
+    steps:
+      - uses: actions/checkout@v2
+
+      # Azure repositories are not reliable, we need to prevent Azure giving us packages.
+      - name: Make apt sources.list use the default Ubuntu repositories
+        run: |
+          sudo rm -f /etc/apt/sources.list.d/*
+          sudo cp -f ./.github/workflows/sources.list /etc/apt/sources.list
+          sudo apt-get update
+
+      # Install all packages (except SCons).
+      - name: Configure dependencies
+        run: |
+          sudo apt-get install build-essential
+
+      # Use Python 3.x release (works cross platform;
+      # best to keep self contained in it's own step).
+      - name: Set up Python 3.x
+        uses: actions/setup-python@v2
+        with:
+          # Semantic version range syntax or exact version of a Python version.
+          python-version: "3.x"
+          # Optional - x64 or x86 architecture, defaults to x64.
+          architecture: "x64"
+
+      # Setup scons, print Python version and SCons version info,
+      # so if anything is broken it won't run the build.
+      - name: Configuring Python packages
+        run: |
+          python -c "import sys; print(sys.version)"
+          python -m pip install scons
+          python --version
+          scons --version
+
+      - name: Compilation
+        run: |
+          cd test/
+          scons platform=linux verbose=yes warnings=extra werror=yes --jobs=2
+
+      - name: Execute Tests
+        run: |
+          cd test/
+          ./polypartition_test

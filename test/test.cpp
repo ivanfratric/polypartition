@@ -341,7 +341,7 @@ int main() {
 
   DrawPolyList("test_input.bmp", &testpolys);
 
-  printf("Testing Triangulate_EC : ");
+  printf("Testing Triangulate_EC: ");
   pp.Triangulate_EC(&testpolys, &result);
   ReadPolyList("test_triangulate_EC.txt", &expectedResult);
   if (ComparePoly(&result, &expectedResult)) {
@@ -355,7 +355,7 @@ int main() {
   result.clear();
   expectedResult.clear();
 
-  printf("Testing Triangulate_OPT : ");
+  printf("Testing Triangulate_OPT: ");
   pp.Triangulate_OPT(&(*testpolys.begin()), &result);
   ReadPolyList("test_triangulate_OPT.txt", &expectedResult);
   if (ComparePoly(&result, &expectedResult)) {
@@ -369,7 +369,7 @@ int main() {
   result.clear();
   expectedResult.clear();
 
-  printf("Testing Triangulate_MONO : ");
+  printf("Testing Triangulate_MONO: ");
   pp.Triangulate_MONO(&testpolys, &result);
   ReadPolyList("test_triangulate_MONO.txt", &expectedResult);
   if (ComparePoly(&result, &expectedResult)) {
@@ -383,7 +383,7 @@ int main() {
   result.clear();
   expectedResult.clear();
 
-  printf("Testing ConvexPartition_HM : ");
+  printf("Testing ConvexPartition_HM: ");
   pp.ConvexPartition_HM(&testpolys, &result);
   ReadPolyList("test_convexpartition_HM.txt", &expectedResult);
   if (ComparePoly(&result, &expectedResult)) {
@@ -397,7 +397,7 @@ int main() {
   result.clear();
   expectedResult.clear();
 
-  printf("Testing ConvexPartition_OPT : ");
+  printf("Testing ConvexPartition_OPT: ");
   pp.ConvexPartition_OPT(&(*testpolys.begin()), &result);
   ReadPolyList("test_convexpartition_OPT.txt", &expectedResult);
   if (ComparePoly(&result, &expectedResult)) {
