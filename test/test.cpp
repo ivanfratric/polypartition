@@ -317,6 +317,7 @@ void GenerateTestData() {
   WritePolyList("test_convexpartition_OPT.txt", &result);
 }
 
+/*
 int main() {
   TPPLPartition pp;
   list<TPPLPoly> testpolys, result;
@@ -328,74 +329,84 @@ int main() {
   }
   DrawPolyList("test2.bmp", &result);
 }
-
-/*
-int main() {
-	TPPLPartition pp;
-
-	list<TPPLPoly> testpolys, result, expectedResult;
-
-	ReadPolyList("test_input.txt", &testpolys);
-
-	DrawPolyList("test_input.bmp", &testpolys);
-
-	printf("Testing Triangulate_EC : ");
-	pp.Triangulate_EC(&testpolys, &result);
-	ReadPolyList("test_triangulate_EC.txt", &expectedResult);
-	if (ComparePoly(&result, &expectedResult)) {
-		printf("success\n");
-	} else {
-		printf("failed\n");
-	}
-
-	result.clear();
-	expectedResult.clear();
-
-	printf("Testing Triangulate_OPT : ");
-	pp.Triangulate_OPT(&(*testpolys.begin()), &result);
-	ReadPolyList("test_triangulate_OPT.txt", &expectedResult);
-	if (ComparePoly(&result, &expectedResult)) {
-		printf("success\n");
-	} else {
-		printf("failed\n");
-	}
-
-	result.clear();
-	expectedResult.clear();
-
-	printf("Testing Triangulate_MONO : ");
-	pp.Triangulate_MONO(&testpolys, &result);
-	ReadPolyList("test_triangulate_MONO.txt", &expectedResult);
-	if (ComparePoly(&result, &expectedResult)) {
-		printf("success\n");
-	} else {
-		printf("failed\n");
-	}
-
-	result.clear();
-	expectedResult.clear();
-
-	printf("Testing ConvexPartition_HM : ");
-	pp.ConvexPartition_HM(&testpolys, &result);
-	ReadPolyList("test_convexpartition_HM.txt", &expectedResult);
-	if (ComparePoly(&result, &expectedResult)) {
-		printf("success\n");
-	} else {
-		printf("failed\n");
-	}
-
-	result.clear();
-	expectedResult.clear();
-
-	printf("Testing ConvexPartition_OPT : ");
-	pp.ConvexPartition_OPT(&(*testpolys.begin()), &result);
-	ReadPolyList("test_convexpartition_OPT.txt", &expectedResult);
-	if (ComparePoly(&result, &expectedResult)) {
-		printf("success\n");
-	} else {
-		printf("failed\n");
-	}
-
-	return 0;
-}
 */
+
+int main() {
+  int failures = 0;
+  TPPLPartition pp;
+
+  list<TPPLPoly> testpolys, result, expectedResult;
+
+  ReadPolyList("test_input.txt", &testpolys);
+
+  DrawPolyList("test_input.bmp", &testpolys);
+
+  printf("Testing Triangulate_EC : ");
+  pp.Triangulate_EC(&testpolys, &result);
+  ReadPolyList("test_triangulate_EC.txt", &expectedResult);
+  if (ComparePoly(&result, &expectedResult)) {
+    printf("success\n");
+  } else {
+    printf("failed\n");
+    failures++;
+  }
+  DrawPolyList("tri_ec.bmp", &result);
+
+  result.clear();
+  expectedResult.clear();
+
+  printf("Testing Triangulate_OPT : ");
+  pp.Triangulate_OPT(&(*testpolys.begin()), &result);
+  ReadPolyList("test_triangulate_OPT.txt", &expectedResult);
+  if (ComparePoly(&result, &expectedResult)) {
+    printf("success\n");
+  } else {
+    printf("failed\n");
+    failures++;
+  }
+  DrawPolyList("tri_opt.bmp", &result);
+
+  result.clear();
+  expectedResult.clear();
+
+  printf("Testing Triangulate_MONO : ");
+  pp.Triangulate_MONO(&testpolys, &result);
+  ReadPolyList("test_triangulate_MONO.txt", &expectedResult);
+  if (ComparePoly(&result, &expectedResult)) {
+    printf("success\n");
+  } else {
+    printf("failed\n");
+    failures++;
+  }
+  DrawPolyList("tri_mono.bmp", &result);
+
+  result.clear();
+  expectedResult.clear();
+
+  printf("Testing ConvexPartition_HM : ");
+  pp.ConvexPartition_HM(&testpolys, &result);
+  ReadPolyList("test_convexpartition_HM.txt", &expectedResult);
+  if (ComparePoly(&result, &expectedResult)) {
+    printf("success\n");
+  } else {
+    printf("failed\n");
+    failures++;
+  }
+  DrawPolyList("conv_hm.bmp", &result);
+
+  result.clear();
+  expectedResult.clear();
+
+  printf("Testing ConvexPartition_OPT : ");
+  pp.ConvexPartition_OPT(&(*testpolys.begin()), &result);
+  ReadPolyList("test_convexpartition_OPT.txt", &expectedResult);
+  if (ComparePoly(&result, &expectedResult)) {
+    printf("success\n");
+  } else {
+    printf("failed\n");
+    failures++;
+  }
+  DrawPolyList("conv_opt.bmp", &result);
+
+  return failures;
+}

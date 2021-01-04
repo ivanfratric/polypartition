@@ -1,0 +1,4 @@
+.sconsign.dblite
+polypartition_test
+*.o
+*.bmp
