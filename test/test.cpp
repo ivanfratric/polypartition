@@ -202,7 +202,7 @@ void DrawPoly(const char *filename, TPPLPoly *poly) {
 }
 
 void DrawPolyList(const char *filename, list<TPPLPoly> *polys) {
-  Image img(500, 500);
+  Image img(300, 450);
   Image::Pixel white = { 255, 255, 255 };
   img.Clear(white);
 
