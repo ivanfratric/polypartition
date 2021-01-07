@@ -1,0 +1,13 @@
+2        # Number of polygons defined in this file.
+4        # Number of vertices in the first polygon.
+0        # This polygon is NOT a hole.
+77 479   # Position of a vertex, Y is down, must be clockwise order.
+77 419   # Position of a vertex, Y is down, must be clockwise order.
+137 419  # Position of a vertex, Y is down, must be clockwise order.
+137 479  # Position of a vertex, Y is down, must be clockwise order.
+4        # Number of vertices in the second polygon.
+1        # This polygon IS a hole.
+97 459   # Position of a vertex, Y is down, must be clockwise order.
+117 459  # Position of a vertex, Y is down, must be clockwise order.
+117 439  # Position of a vertex, Y is down, must be clockwise order.
+97 439   # Position of a vertex, Y is down, must be clockwise order.
