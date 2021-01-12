@@ -29,8 +29,19 @@
 
 typedef double tppl_float;
 
-#define TPPL_CCW 1
-#define TPPL_CW -1
+enum TPPLOrientation {
+  TPPL_ORIENTATION_CW = -1,
+  TPPL_ORIENTATION_NONE = 0,
+  TPPL_ORIENTATION_CCW = 1,
+};
+
+enum TPPLVertexType {
+  TPPL_VERTEXTYPE_REGULAR = 0,
+  TPPL_VERTEXTYPE_START = 1,
+  TPPL_VERTEXTYPE_END = 2,
+  TPPL_VERTEXTYPE_SPLIT = 3,
+  TPPL_VERTEXTYPE_MERGE = 4,
+};
 
 // 2D point structure.
 struct TPPLPoint {
@@ -139,16 +150,18 @@ class TPPLPoly {
 
   // Returns the orientation of the polygon.
   // Possible values:
-  //    TPPL_CCW : Polygon vertices are in counter-clockwise order.
-  //    TPPL_CW : Polygon vertices are in clockwise order.
-  //        0 : The polygon has no (measurable) area.
-  int GetOrientation() const;
+  //    TPPL_ORIENTATION_CCW: Polygon vertices are in counter-clockwise order.
+  //    TPPL_ORIENTATION_CW: Polygon vertices are in clockwise order.
+  //    TPPL_ORIENTATION_NONE: The polygon has no (measurable) area.
+  TPPLOrientation GetOrientation() const;
 
   // Sets the polygon orientation.
   // Possible values:
-  //    TPPL_CCW : Sets vertices in counter-clockwise order.
-  //    TPPL_CW : Sets vertices in clockwise order.
-  void SetOrientation(int orientation);
+  //    TPPL_ORIENTATION_CCW: Sets vertices in counter-clockwise order.
+  //    TPPL_ORIENTATION_CW: Sets vertices in clockwise order.
+  //    TPPL_ORIENTATION_NONE: Reverses the orientation of the vertices if there
+  //       is one, otherwise does nothing (if orientation is already NONE).
+  void SetOrientation(TPPLOrientation orientation);
 
   // Checks whether a polygon is valid or not.
   inline bool Valid() const { return this->numpoints >= 3; }
@@ -252,7 +265,7 @@ public:
   // Helper functions for MonotonePartition.
   bool Below(TPPLPoint &p1, TPPLPoint &p2);
   void AddDiagonal(MonotoneVertex *vertices, long *numvertices, long index1, long index2,
-          char *vertextypes, std::set<ScanLineEdge>::iterator *edgeTreeIterators,
+          TPPLVertexType *vertextypes, std::set<ScanLineEdge>::iterator *edgeTreeIterators,
           std::set<ScanLineEdge> *edgeTree, long *helpers);
 
   // Triangulates a monotone polygon, used in Triangulate_MONO.

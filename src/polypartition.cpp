@@ -21,24 +21,12 @@
 /* SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.                */
 /*************************************************************************/
 
-#include <math.h>
-#include <stdio.h>
-#include <string.h>
-#include <algorithm>
-#include <list>
-#include <set>
-#include <stdexcept>
-#include <vector>
-
-using namespace std;
-
 #include "polypartition.h"
 
-#define TPPL_VERTEXTYPE_REGULAR 0
-#define TPPL_VERTEXTYPE_START 1
-#define TPPL_VERTEXTYPE_END 2
-#define TPPL_VERTEXTYPE_SPLIT 3
-#define TPPL_VERTEXTYPE_MERGE 4
+#include <math.h>
+#include <string.h>
+#include <algorithm>
+#include <vector>
 
 TPPLPoly::TPPLPoly() {
   hole = false;
@@ -98,7 +86,7 @@ TPPLPoly &TPPLPoly::operator=(const TPPLPoly &src) {
   return *this;
 }
 
-int TPPLPoly::GetOrientation() const {
+TPPLOrientation TPPLPoly::GetOrientation() const {
   long i1, i2;
   tppl_float area = 0;
   for (i1 = 0; i1 < numpoints; i1++) {
@@ -109,17 +97,17 @@ int TPPLPoly::GetOrientation() const {
     area += points[i1].x * points[i2].y - points[i1].y * points[i2].x;
   }
   if (area > 0) {
-    return TPPL_CCW;
+    return TPPL_ORIENTATION_CCW;
   }
   if (area < 0) {
-    return TPPL_CW;
+    return TPPL_ORIENTATION_CW;
   }
-  return 0;
+  return TPPL_ORIENTATION_NONE;
 }
 
-void TPPLPoly::SetOrientation(int orientation) {
-  int polyorientation = GetOrientation();
-  if (polyorientation && (polyorientation != orientation)) {
+void TPPLPoly::SetOrientation(TPPLOrientation orientation) {
+  TPPLOrientation polyorientation = GetOrientation();
+  if (polyorientation != TPPL_ORIENTATION_NONE && polyorientation != orientation) {
     Invert();
   }
 }
@@ -996,8 +984,8 @@ int TPPLPartition::ConvexPartition_OPT(TPPLPoly *poly, TPPLPolyList *parts) {
   DiagonalList::iterator iter, iter2;
   int ret;
   TPPLPoly newpoly;
-  vector<long> indices;
-  vector<long>::iterator iiter;
+  std::vector<long> indices;
+  std::vector<long>::iterator iiter;
   bool ijreal, jkreal;
 
   n = poly->GetNumPoints();
@@ -1342,7 +1330,7 @@ int TPPLPartition::MonotonePartition(TPPLPolyList *inpolys, TPPLPolyList *monoto
   std::sort(priority, &(priority[numvertices]), VertexSorter(vertices));
 
   // Determine vertex types.
-  char *vertextypes = new char[maxnumvertices];
+  TPPLVertexType *vertextypes = new TPPLVertexType[maxnumvertices];
   for (i = 0; i < numvertices; i++) {
     v = &(vertices[i]);
     vprev = &(vertices[v->previous]);
@@ -1372,12 +1360,12 @@ int TPPLPartition::MonotonePartition(TPPLPolyList *inpolys, TPPLPolyList *monoto
   // Note that while set doesn't actually have to be implemented as
   // a tree, complexity requirements for operations are the same as
   // for the balanced binary search tree.
-  set<ScanLineEdge> edgeTree;
+  std::set<ScanLineEdge> edgeTree;
   // Store iterators to the edge tree elements.
   // This makes deleting existing edges much faster.
-  set<ScanLineEdge>::iterator *edgeTreeIterators, edgeIter;
-  edgeTreeIterators = new set<ScanLineEdge>::iterator[maxnumvertices];
-  pair<set<ScanLineEdge>::iterator, bool> edgeTreeRet;
+  std::set<ScanLineEdge>::iterator *edgeTreeIterators, edgeIter;
+  edgeTreeIterators = new std::set<ScanLineEdge>::iterator[maxnumvertices];
+  std::pair<std::set<ScanLineEdge>::iterator, bool> edgeTreeRet;
   for (i = 0; i < numvertices; i++) {
     edgeTreeIterators[i] = edgeTree.end();
   }
@@ -1581,8 +1569,8 @@ int TPPLPartition::MonotonePartition(TPPLPolyList *inpolys, TPPLPolyList *monoto
 
 // Adds a diagonal to the doubly-connected list of vertices.
 void TPPLPartition::AddDiagonal(MonotoneVertex *vertices, long *numvertices, long index1, long index2,
-        char *vertextypes, set<ScanLineEdge>::iterator *edgeTreeIterators,
-        set<ScanLineEdge> *edgeTree, long *helpers) {
+        TPPLVertexType *vertextypes, std::set<ScanLineEdge>::iterator *edgeTreeIterators,
+        std::set<ScanLineEdge> *edgeTree, long *helpers) {
   long newindex1, newindex2;
 
   newindex1 = *numvertices;
