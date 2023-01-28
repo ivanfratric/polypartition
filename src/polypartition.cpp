@@ -1444,7 +1444,6 @@ int TPPLPartition::MonotonePartition(TPPLPolyList *inpolys, TPPLPolyList *monoto
           AddDiagonal(vertices, &newnumvertices, vindex, helpers[v->previous],
                   vertextypes, edgeTreeIterators, &edgeTree, helpers);
           vindex2 = newnumvertices - 2;
-          v2 = &(vertices[vindex2]);
         }
         // Delete e_i - 1 from T.
         edgeTree.erase(edgeTreeIterators[v->previous]);
