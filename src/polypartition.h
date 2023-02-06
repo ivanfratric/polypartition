@@ -86,7 +86,7 @@ struct TPPLPoint {
   }
 
   bool operator!=(const TPPLPoint &p) const {
-    return !(x == y);
+    return !(*this == p);
   }
 #pragma clang diagnostic pop
 };
@@ -167,7 +167,7 @@ class TPPLPoly {
   void SetOrientation(TPPLOrientation orientation);
 
   // Checks whether a polygon is valid or not.
-  inline bool Valid() const { return this->numpoints >= 3; }
+  bool Valid() const { return this->numpoints >= 3; }
 };
 
 #ifdef TPPL_ALLOCATOR
@@ -209,6 +209,9 @@ public:
   struct Diagonal {
     long index1;
     long index2;
+
+    Diagonal(const long i1, const long i2) :
+      index1(i1), index2(i2) {}
   };
 
 #ifdef TPPL_ALLOCATOR
@@ -339,7 +342,7 @@ public:
   //    triangles:
   //       A list of triangles (result).
   // Returns 1 on success, 0 on failure.
-  int Triangulate_MONO(TPPLPoly *poly, TPPLPolyList *triangles);
+  int Triangulate_MONO(const TPPLPoly *poly, TPPLPolyList *triangles);
 
   // Triangulates a list of polygons by first
   // partitioning them into monotone polygons.
