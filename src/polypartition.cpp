@@ -31,7 +31,7 @@
 TPPLPoly::TPPLPoly() {
   hole = false;
   numpoints = 0;
-  points = NULL;
+  points = nullptr;
 }
 
 TPPLPoly::~TPPLPoly() {
@@ -42,16 +42,16 @@ void TPPLPoly::Clear() {
   delete[] points;
   hole = false;
   numpoints = 0;
-  points = NULL;
+  points = nullptr;
 }
 
-void TPPLPoly::Init(long numpoints) {
+void TPPLPoly::Init(const long numpoints) {
   Clear();
   this->numpoints = numpoints;
   points = new TPPLPoint[numpoints];
 }
 
-void TPPLPoly::Triangle(TPPLPoint &p1, TPPLPoint &p2, TPPLPoint &p3) {
+void TPPLPoly::Triangle(const TPPLPoint &p1, const TPPLPoint &p2, const TPPLPoint &p3) {
   Init(3);
   points[0] = p1;
   points[1] = p2;
@@ -83,10 +83,9 @@ TPPLPoly &TPPLPoly::operator=(const TPPLPoly &src) {
 }
 
 TPPLOrientation TPPLPoly::GetOrientation() const {
-  long i1, i2;
   tppl_float area = 0;
-  for (i1 = 0; i1 < numpoints; i1++) {
-    i2 = i1 + 1;
+  for (long i1 = 0; i1 < numpoints; i1++) {
+    long i2 = i1 + 1;
     if (i2 == numpoints) {
       i2 = 0;
     }
@@ -101,7 +100,7 @@ TPPLOrientation TPPLPoly::GetOrientation() const {
   return TPPL_ORIENTATION_NONE;
 }
 
-void TPPLPoly::SetOrientation(TPPLOrientation orientation) {
+void TPPLPoly::SetOrientation(const TPPLOrientation orientation) {
   TPPLOrientation polyorientation = GetOrientation();
   if (polyorientation != TPPL_ORIENTATION_NONE && polyorientation != orientation) {
     Invert();
@@ -113,12 +112,12 @@ void TPPLPoly::Invert() {
 }
 
 TPPLPartition::PartitionVertex::PartitionVertex() :
-        previous(NULL), next(NULL) {
+  previous(nullptr), next(nullptr) {
 }
 
 TPPLPoint TPPLPartition::Normalize(const TPPLPoint &p) {
   TPPLPoint r;
-  tppl_float n = sqrt(p.x * p.x + p.y * p.y);
+  const tppl_float n = sqrt(p.x * p.x + p.y * p.y);
   if (n != 0) {
     r = p / n;
   } else {
@@ -129,14 +128,13 @@ TPPLPoint TPPLPartition::Normalize(const TPPLPoint &p) {
 }
 
 tppl_float TPPLPartition::Distance(const TPPLPoint &p1, const TPPLPoint &p2) {
-  tppl_float dx, dy;
-  dx = p2.x - p1.x;
-  dy = p2.y - p1.y;
+  const tppl_float dx = p2.x - p1.x;
+  const tppl_float dy = p2.y - p1.y;
   return (sqrt(dx * dx + dy * dy));
 }
 
 // Checks if two lines intersect.
-int TPPLPartition::Intersects(TPPLPoint &p11, TPPLPoint &p12, TPPLPoint &p21, TPPLPoint &p22) {
+int TPPLPartition::Intersects(const TPPLPoint &p11, const TPPLPoint &p12, const TPPLPoint &p21, const TPPLPoint &p22) {
   if ((p11.x == p21.x) && (p11.y == p21.y)) {
     return 0;
   }
@@ -150,8 +148,7 @@ int TPPLPartition::Intersects(TPPLPoint &p11, TPPLPoint &p12, TPPLPoint &p21, TP
     return 0;
   }
 
-  TPPLPoint v1ort, v2ort, v;
-  tppl_float dot11, dot12, dot21, dot22;
+  TPPLPoint v1ort, v2ort;
 
   v1ort.x = p12.y - p11.y;
   v1ort.y = p11.x - p12.x;
@@ -159,15 +156,15 @@ int TPPLPartition::Intersects(TPPLPoint &p11, TPPLPoint &p12, TPPLPoint &p21, TP
   v2ort.x = p22.y - p21.y;
   v2ort.y = p21.x - p22.x;
 
-  v = p21 - p11;
-  dot21 = v.x * v1ort.x + v.y * v1ort.y;
+  TPPLPoint v = p21 - p11;
+  const tppl_float dot21 = v.x * v1ort.x + v.y * v1ort.y;
   v = p22 - p11;
-  dot22 = v.x * v1ort.x + v.y * v1ort.y;
+  const tppl_float dot22 = v.x * v1ort.x + v.y * v1ort.y;
 
   v = p11 - p21;
-  dot11 = v.x * v2ort.x + v.y * v2ort.y;
+  const tppl_float dot11 = v.x * v2ort.x + v.y * v2ort.y;
   v = p12 - p21;
-  dot12 = v.x * v2ort.x + v.y * v2ort.y;
+  const tppl_float dot12 = v.x * v2ort.x + v.y * v2ort.y;
 
   if (dot11 * dot12 > 0) {
     return 0;
@@ -315,9 +312,8 @@ int TPPLPartition::RemoveHoles(TPPLPolyList *inpolys, TPPLPolyList *outpolys) {
   return 1;
 }
 
-bool TPPLPartition::IsConvex(TPPLPoint &p1, TPPLPoint &p2, TPPLPoint &p3) {
-  tppl_float tmp;
-  tmp = (p3.y - p1.y) * (p2.x - p1.x) - (p3.x - p1.x) * (p2.y - p1.y);
+bool TPPLPartition::IsConvex(const TPPLPoint &p1, const TPPLPoint &p2, const TPPLPoint &p3) {
+  const tppl_float tmp = (p3.y - p1.y) * (p2.x - p1.x) - (p3.x - p1.x) * (p2.y - p1.y);
   if (tmp > 0) {
     return 1;
   } else {
@@ -325,9 +321,8 @@ bool TPPLPartition::IsConvex(TPPLPoint &p1, TPPLPoint &p2, TPPLPoint &p3) {
   }
 }
 
-bool TPPLPartition::IsReflex(TPPLPoint &p1, TPPLPoint &p2, TPPLPoint &p3) {
-  tppl_float tmp;
-  tmp = (p3.y - p1.y) * (p2.x - p1.x) - (p3.x - p1.x) * (p2.y - p1.y);
+bool TPPLPartition::IsReflex(const TPPLPoint &p1, const TPPLPoint &p2, const TPPLPoint &p3) {
+  const tppl_float tmp = (p3.y - p1.y) * (p2.x - p1.x) - (p3.x - p1.x) * (p2.y - p1.y);
   if (tmp < 0) {
     return 1;
   } else {
@@ -335,7 +330,7 @@ bool TPPLPartition::IsReflex(TPPLPoint &p1, TPPLPoint &p2, TPPLPoint &p3) {
   }
 }
 
-bool TPPLPartition::IsInside(TPPLPoint &p1, TPPLPoint &p2, TPPLPoint &p3, TPPLPoint &p) {
+bool TPPLPartition::IsInside(const TPPLPoint &p1, const TPPLPoint &p2, const TPPLPoint &p3, const TPPLPoint &p) {
   if (IsConvex(p1, p, p2)) {
     return false;
   }
@@ -348,10 +343,8 @@ bool TPPLPartition::IsInside(TPPLPoint &p1, TPPLPoint &p2, TPPLPoint &p3, TPPLPo
   return true;
 }
 
-bool TPPLPartition::InCone(TPPLPoint &p1, TPPLPoint &p2, TPPLPoint &p3, TPPLPoint &p) {
-  bool convex;
-
-  convex = IsConvex(p1, p2, p3);
+bool TPPLPartition::InCone(const TPPLPoint &p1, const TPPLPoint &p2, const TPPLPoint &p3, const TPPLPoint &p) {
+  const bool convex = IsConvex(p1, p2, p3);
 
   if (convex) {
     if (!IsConvex(p1, p2, p)) {
@@ -372,40 +365,34 @@ bool TPPLPartition::InCone(TPPLPoint &p1, TPPLPoint &p2, TPPLPoint &p3, TPPLPoin
   }
 }
 
-bool TPPLPartition::InCone(PartitionVertex *v, TPPLPoint &p) {
-  TPPLPoint p1, p2, p3;
-
-  p1 = v->previous->p;
-  p2 = v->p;
-  p3 = v->next->p;
+bool TPPLPartition::InCone(const PartitionVertex *v, const TPPLPoint &p) {
+  const TPPLPoint p1 = v->previous->p;
+  const TPPLPoint p2 = v->p;
+  const TPPLPoint p3 = v->next->p;
 
   return InCone(p1, p2, p3, p);
 }
 
 void TPPLPartition::UpdateVertexReflexity(PartitionVertex *v) {
-  PartitionVertex *v1 = NULL, *v3 = NULL;
-  v1 = v->previous;
+  const PartitionVertex *v3 = nullptr;
+  const PartitionVertex* v1 = v->previous;
   v3 = v->next;
   v->isConvex = !IsReflex(v1->p, v->p, v3->p);
 }
 
-void TPPLPartition::UpdateVertex(PartitionVertex *v, PartitionVertex *vertices, long numvertices) {
-  long i;
-  PartitionVertex *v1 = NULL, *v3 = NULL;
-  TPPLPoint vec1, vec3;
-
-  v1 = v->previous;
-  v3 = v->next;
+void TPPLPartition::UpdateVertex(PartitionVertex *v, const PartitionVertex *vertices, const long numvertices) {
+  const PartitionVertex* v1 = v->previous;
+  const PartitionVertex* v3 = v->next;
 
   v->isConvex = IsConvex(v1->p, v->p, v3->p);
 
-  vec1 = Normalize(v1->p - v->p);
-  vec3 = Normalize(v3->p - v->p);
+  const TPPLPoint vec1 = Normalize(v1->p - v->p);
+  const TPPLPoint vec3 = Normalize(v3->p - v->p);
   v->angle = vec1.x * vec3.x + vec1.y * vec3.y;
 
   if (v->isConvex) {
     v->isEar = true;
-    for (i = 0; i < numvertices; i++) {
+    for (long i = 0; i < numvertices; i++) {
       if ((vertices[i].p.x == v->p.x) && (vertices[i].p.y == v->p.y)) {
         continue;
       }
@@ -432,11 +419,10 @@ int TPPLPartition::Triangulate_EC(TPPLPoly *poly, TPPLPolyList *triangles) {
   }
 
   long numvertices;
-  PartitionVertex *vertices = NULL;
-  PartitionVertex *ear = NULL;
+  PartitionVertex *vertices = nullptr;
+  PartitionVertex *ear = nullptr;
   TPPLPoly triangle;
-  long i, j;
-  bool earfound;
+  long i;
 
   if (poly->GetNumPoints() < 3) {
     return 0;
@@ -468,9 +454,9 @@ int TPPLPartition::Triangulate_EC(TPPLPoly *poly, TPPLPolyList *triangles) {
   }
 
   for (i = 0; i < numvertices - 3; i++) {
-    earfound = false;
+    bool earfound = false;
     // Find the most extruded ear.
-    for (j = 0; j < numvertices; j++) {
+    for (long j = 0; j < numvertices; j++) {
       if (!vertices[j].isActive) {
         continue;
       }
@@ -540,7 +526,7 @@ int TPPLPartition::ConvexPartition_HM(TPPLPoly *poly, TPPLPolyList *parts) {
 
   TPPLPolyList triangles;
   TPPLPolyList::iterator iter1, iter2;
-  TPPLPoly *poly1 = NULL, *poly2 = NULL;
+  TPPLPoly *poly1 = nullptr, *poly2 = nullptr;
   TPPLPoly newpoly;
   TPPLPoint d1, d2, p1, p2, p3;
   long i11, i12, i21, i22, i13, i23, j, k;
@@ -673,12 +659,11 @@ int TPPLPartition::ConvexPartition_HM(TPPLPoly *poly, TPPLPolyList *parts) {
 
 int TPPLPartition::ConvexPartition_HM(TPPLPolyList *inpolys, TPPLPolyList *parts) {
   TPPLPolyList outpolys;
-  TPPLPolyList::iterator iter;
 
   if (!RemoveHoles(inpolys, &outpolys)) {
     return 0;
   }
-  for (iter = outpolys.begin(); iter != outpolys.end(); iter++) {
+  for (TPPLPolyList::iterator iter = outpolys.begin(); iter != outpolys.end(); iter++) {
     if (!ConvexPartition_HM(&(*iter), parts)) {
       return 0;
     }
@@ -695,7 +680,7 @@ int TPPLPartition::Triangulate_OPT(TPPLPoly *poly, TPPLPolyList *triangles) {
   }
 
   long i, j, k, gap, n;
-  DPState **dpstates = NULL;
+  DPState **dpstates = nullptr;
   TPPLPoint p1, p2, p3, p4;
   long bestvertex;
   tppl_float weight, minweight, d1, d2;
@@ -850,12 +835,11 @@ int TPPLPartition::Triangulate_OPT(TPPLPoly *poly, TPPLPolyList *triangles) {
   return ret;
 }
 
-void TPPLPartition::UpdateState(long a, long b, long w, long i, long j, DPState2 **dpstates) {
+void TPPLPartition::UpdateState(const long a, const long b, const long w, const long i, const long j, DPState2 **dpstates) {
   Diagonal newdiagonal;
-  DiagonalList *pairs = NULL;
-  long w2;
+  DiagonalList *pairs = nullptr;
 
-  w2 = dpstates[a][b].weight;
+  const long w2 = dpstates[a][b].weight;
   if (w > w2) {
     return;
   }
@@ -879,17 +863,12 @@ void TPPLPartition::UpdateState(long a, long b, long w, long i, long j, DPState2
   }
 }
 
-void TPPLPartition::TypeA(long i, long j, long k, PartitionVertex *vertices, DPState2 **dpstates) {
-  DiagonalList *pairs = NULL;
-  DiagonalList::iterator iter, lastiter;
-  long top;
-  long w;
-
+void TPPLPartition::TypeA(const long i, const long j, const long k, const PartitionVertex *vertices, DPState2 **dpstates) {
   if (!dpstates[i][j].visible) {
     return;
   }
-  top = j;
-  w = dpstates[i][j].weight;
+  long top = j;
+  long w = dpstates[i][j].weight;
   if (k - j > 1) {
     if (!dpstates[j][k].visible) {
       return;
@@ -897,9 +876,10 @@ void TPPLPartition::TypeA(long i, long j, long k, PartitionVertex *vertices, DPS
     w += dpstates[j][k].weight + 1;
   }
   if (j - i > 1) {
+    DiagonalList *pairs = nullptr;
     pairs = &(dpstates[i][j].pairs);
-    iter = pairs->end();
-    lastiter = pairs->end();
+    DiagonalList::iterator iter = pairs->end();
+    DiagonalList::iterator lastiter = pairs->end();
     while (iter != pairs->begin()) {
       iter--;
       if (!IsReflex(vertices[iter->index2].p, vertices[j].p, vertices[k].p)) {
@@ -921,17 +901,12 @@ void TPPLPartition::TypeA(long i, long j, long k, PartitionVertex *vertices, DPS
   UpdateState(i, k, w, top, j, dpstates);
 }
 
-void TPPLPartition::TypeB(long i, long j, long k, PartitionVertex *vertices, DPState2 **dpstates) {
-  DiagonalList *pairs = NULL;
-  DiagonalList::iterator iter, lastiter;
-  long top;
-  long w;
-
+void TPPLPartition::TypeB(const long i, const long j, const long k, const PartitionVertex *vertices, DPState2 **dpstates) {
   if (!dpstates[j][k].visible) {
     return;
   }
-  top = j;
-  w = dpstates[j][k].weight;
+  long top = j;
+  long w = dpstates[j][k].weight;
 
   if (j - i > 1) {
     if (!dpstates[i][j].visible) {
@@ -940,11 +915,11 @@ void TPPLPartition::TypeB(long i, long j, long k, PartitionVertex *vertices, DPS
     w += dpstates[i][j].weight + 1;
   }
   if (k - j > 1) {
-    pairs = &(dpstates[j][k].pairs);
+    DiagonalList* pairs = &(dpstates[j][k].pairs);
 
-    iter = pairs->begin();
+    DiagonalList::iterator iter = pairs->begin();
     if ((!pairs->empty()) && (!IsReflex(vertices[i].p, vertices[j].p, vertices[iter->index1].p))) {
-      lastiter = iter;
+      DiagonalList::iterator lastiter = iter;
       while (iter != pairs->end()) {
         if (!IsReflex(vertices[i].p, vertices[j].p, vertices[iter->index1].p)) {
           lastiter = iter;
@@ -971,12 +946,12 @@ int TPPLPartition::ConvexPartition_OPT(TPPLPoly *poly, TPPLPolyList *parts) {
   }
 
   TPPLPoint p1, p2, p3, p4;
-  PartitionVertex *vertices = NULL;
-  DPState2 **dpstates = NULL;
+  PartitionVertex *vertices = nullptr;
+  DPState2 **dpstates = nullptr;
   long i, j, k, n, gap;
   DiagonalList diagonals, diagonals2;
   Diagonal diagonal, newdiagonal;
-  DiagonalList *pairs = NULL, *pairs2 = NULL;
+  DiagonalList *pairs = nullptr, *pairs2 = nullptr;
   DiagonalList::iterator iter, iter2;
   int ret;
   TPPLPoly newpoly;
@@ -1278,11 +1253,11 @@ int TPPLPartition::ConvexPartition_OPT(TPPLPoly *poly, TPPLPolyList *parts) {
 // by Mark de Berg, Otfried Cheong, Marc van Kreveld, and Mark Overmars.
 int TPPLPartition::MonotonePartition(TPPLPolyList *inpolys, TPPLPolyList *monotonePolys) {
   TPPLPolyList::iterator iter;
-  MonotoneVertex *vertices = NULL;
+  MonotoneVertex *vertices = nullptr;
   long i, numvertices, vindex, vindex2, newnumvertices, maxnumvertices;
   long polystartindex, polyendindex;
-  TPPLPoly *poly = NULL;
-  MonotoneVertex *v = NULL, *v2 = NULL, *vprev = NULL, *vnext = NULL;
+  TPPLPoly *poly = nullptr;
+  MonotoneVertex *v = nullptr, *v2 = nullptr, *vprev = nullptr, *vnext = nullptr;
   ScanLineEdge newedge;
   bool error = false;
 
@@ -1563,7 +1538,7 @@ int TPPLPartition::MonotonePartition(TPPLPolyList *inpolys, TPPLPolyList *monoto
 }
 
 // Adds a diagonal to the doubly-connected list of vertices.
-void TPPLPartition::AddDiagonal(MonotoneVertex *vertices, long *numvertices, long index1, long index2,
+void TPPLPartition::AddDiagonal(MonotoneVertex *vertices, long *numvertices, const long index1, const long index2,
         TPPLVertexType *vertextypes, std::set<ScanLineEdge>::iterator *edgeTreeIterators,
         std::set<ScanLineEdge> *edgeTree, long *helpers) {
   long newindex1, newindex2;
@@ -1603,7 +1578,7 @@ void TPPLPartition::AddDiagonal(MonotoneVertex *vertices, long *numvertices, lon
   }
 }
 
-bool TPPLPartition::Below(TPPLPoint &p1, TPPLPoint &p2) {
+bool TPPLPartition::Below(const TPPLPoint &p1, const TPPLPoint &p2) {
   if (p1.y < p2.y) {
     return true;
   } else if (p1.y == p2.y) {
@@ -1615,7 +1590,7 @@ bool TPPLPartition::Below(TPPLPoint &p1, TPPLPoint &p2) {
 }
 
 // Sorts in the falling order of y values, if y is equal, x is used instead.
-bool TPPLPartition::VertexSorter::operator()(long index1, long index2) {
+bool TPPLPartition::VertexSorter::operator()(const long index1, const long index2) const {
   if (vertices[index1].p.y > vertices[index2].p.y) {
     return true;
   } else if (vertices[index1].p.y == vertices[index2].p.y) {
@@ -1627,8 +1602,7 @@ bool TPPLPartition::VertexSorter::operator()(long index1, long index2) {
 }
 
 bool TPPLPartition::ScanLineEdge::IsConvex(const TPPLPoint &p1, const TPPLPoint &p2, const TPPLPoint &p3) const {
-  tppl_float tmp;
-  tmp = (p3.y - p1.y) * (p2.x - p1.x) - (p3.x - p1.x) * (p2.y - p1.y);
+  const tppl_float tmp = (p3.y - p1.y) * (p2.x - p1.x) - (p3.x - p1.x) * (p2.y - p1.y);
   if (tmp > 0) {
     return 1;
   }
@@ -1654,13 +1628,13 @@ bool TPPLPartition::ScanLineEdge::operator<(const ScanLineEdge &other) const {
 // Triangulates monotone polygon.
 // Time complexity: O(n)
 // Space complexity: O(n)
-int TPPLPartition::TriangulateMonotone(TPPLPoly *inPoly, TPPLPolyList *triangles) {
+int TPPLPartition::TriangulateMonotone(const TPPLPoly *inPoly, TPPLPolyList *triangles) {
   if (!inPoly->Valid()) {
     return 0;
   }
 
   long i, i2, j, topindex, bottomindex, leftindex, rightindex, vindex;
-  TPPLPoint *points = NULL;
+  TPPLPoint *points = nullptr;
   long numpoints;
   TPPLPoly triangle;
 
@@ -1825,12 +1799,11 @@ int TPPLPartition::TriangulateMonotone(TPPLPoly *inPoly, TPPLPolyList *triangles
 
 int TPPLPartition::Triangulate_MONO(TPPLPolyList *inpolys, TPPLPolyList *triangles) {
   TPPLPolyList monotone;
-  TPPLPolyList::iterator iter;
 
   if (!MonotonePartition(inpolys, &monotone)) {
     return 0;
   }
-  for (iter = monotone.begin(); iter != monotone.end(); iter++) {
+  for (TPPLPolyList::iterator iter = monotone.begin(); iter != monotone.end(); iter++) {
     if (!TriangulateMonotone(&(*iter), triangles)) {
       return 0;
     }

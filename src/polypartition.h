@@ -112,27 +112,27 @@ class TPPLPoly {
     return hole;
   }
 
-  void SetHole(bool hole) {
+  void SetHole(const bool hole) {
     this->hole = hole;
   }
 
-  TPPLPoint &GetPoint(long i) {
+  TPPLPoint &GetPoint(const long i) {
     return points[i];
   }
 
-  const TPPLPoint &GetPoint(long i) const {
+  const TPPLPoint &GetPoint(const long i) const {
     return points[i];
   }
 
-  TPPLPoint *GetPoints() {
+  TPPLPoint *GetPoints() const {
     return points;
   }
 
-  TPPLPoint &operator[](int i) {
+  TPPLPoint &operator[](const int i) {
     return points[i];
   }
 
-  const TPPLPoint &operator[](int i) const {
+  const TPPLPoint &operator[](const int i) const {
     return points[i];
   }
 
@@ -143,7 +143,7 @@ class TPPLPoly {
   void Init(long numpoints);
 
   // Creates a triangle with points p1, p2, and p3.
-  void Triangle(TPPLPoint &p1, TPPLPoint &p2, TPPLPoint &p3);
+  void Triangle(const TPPLPoint &p1, const TPPLPoint &p2, const TPPLPoint &p3);
 
   // Inverts the orfer of vertices.
   void Invert();
@@ -200,7 +200,7 @@ class TPPLPartition {
 public:
     VertexSorter(MonotoneVertex *v) :
             vertices(v) {}
-    bool operator()(long index1, long index2);
+    bool operator()(long index1, long index2) const;
   };
 
   struct Diagonal {
@@ -241,35 +241,35 @@ public:
   };
 
   // Standard helper functions.
-  bool IsConvex(TPPLPoint &p1, TPPLPoint &p2, TPPLPoint &p3);
-  bool IsReflex(TPPLPoint &p1, TPPLPoint &p2, TPPLPoint &p3);
-  bool IsInside(TPPLPoint &p1, TPPLPoint &p2, TPPLPoint &p3, TPPLPoint &p);
+  bool IsConvex(const TPPLPoint &p1, const TPPLPoint &p2, const TPPLPoint &p3);
+  bool IsReflex(const TPPLPoint &p1, const TPPLPoint &p2, const TPPLPoint &p3);
+  bool IsInside(const TPPLPoint &p1, const TPPLPoint &p2, const TPPLPoint &p3, const TPPLPoint &p);
 
-  bool InCone(TPPLPoint &p1, TPPLPoint &p2, TPPLPoint &p3, TPPLPoint &p);
-  bool InCone(PartitionVertex *v, TPPLPoint &p);
+  bool InCone(const TPPLPoint &p1, const TPPLPoint &p2, const TPPLPoint &p3, const TPPLPoint &p);
+  bool InCone(const PartitionVertex *v, const TPPLPoint &p);
 
-  int Intersects(TPPLPoint &p11, TPPLPoint &p12, TPPLPoint &p21, TPPLPoint &p22);
+  int Intersects(const TPPLPoint &p11, const TPPLPoint &p12, const TPPLPoint &p21, const TPPLPoint &p22);
 
   TPPLPoint Normalize(const TPPLPoint &p);
   tppl_float Distance(const TPPLPoint &p1, const TPPLPoint &p2);
 
   // Helper functions for Triangulate_EC.
   void UpdateVertexReflexity(PartitionVertex *v);
-  void UpdateVertex(PartitionVertex *v, PartitionVertex *vertices, long numvertices);
+  void UpdateVertex(PartitionVertex *v, const PartitionVertex *vertices, long numvertices);
 
   // Helper functions for ConvexPartition_OPT.
   void UpdateState(long a, long b, long w, long i, long j, DPState2 **dpstates);
-  void TypeA(long i, long j, long k, PartitionVertex *vertices, DPState2 **dpstates);
-  void TypeB(long i, long j, long k, PartitionVertex *vertices, DPState2 **dpstates);
+  void TypeA(long i, long j, long k, const PartitionVertex *vertices, DPState2 **dpstates);
+  void TypeB(long i, long j, long k, const PartitionVertex *vertices, DPState2 **dpstates);
 
   // Helper functions for MonotonePartition.
-  bool Below(TPPLPoint &p1, TPPLPoint &p2);
+  bool Below(const TPPLPoint &p1, const TPPLPoint &p2);
   void AddDiagonal(MonotoneVertex *vertices, long *numvertices, long index1, long index2,
           TPPLVertexType *vertextypes, std::set<ScanLineEdge>::iterator *edgeTreeIterators,
           std::set<ScanLineEdge> *edgeTree, long *helpers);
 
   // Triangulates a monotone polygon, used in Triangulate_MONO.
-  int TriangulateMonotone(TPPLPoly *inPoly, TPPLPolyList *triangles);
+  int TriangulateMonotone(const TPPLPoly *inPoly, TPPLPolyList *triangles);
 
   public:
   // Simple heuristic procedure for removing holes from a list of polygons.
