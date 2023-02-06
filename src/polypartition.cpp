@@ -135,16 +135,7 @@ tppl_float TPPLPartition::Distance(const TPPLPoint &p1, const TPPLPoint &p2) {
 
 // Checks if two lines intersect.
 int TPPLPartition::Intersects(const TPPLPoint &p11, const TPPLPoint &p12, const TPPLPoint &p21, const TPPLPoint &p22) {
-  if ((p11.x == p21.x) && (p11.y == p21.y)) {
-    return 0;
-  }
-  if ((p11.x == p22.x) && (p11.y == p22.y)) {
-    return 0;
-  }
-  if ((p12.x == p21.x) && (p12.y == p21.y)) {
-    return 0;
-  }
-  if ((p12.x == p22.x) && (p12.y == p22.y)) {
+  if (p11 == p21 || p11 == p22 || p12 == p21 || p12 == p22) {
     return 0;
   }
 
@@ -381,13 +372,7 @@ void TPPLPartition::UpdateVertex(PartitionVertex *v, const PartitionVertex *vert
   if (v->isConvex) {
     v->isEar = true;
     for (long i = 0; i < numvertices; i++) {
-      if ((vertices[i].p.x == v->p.x) && (vertices[i].p.y == v->p.y)) {
-        continue;
-      }
-      if ((vertices[i].p.x == v1->p.x) && (vertices[i].p.y == v1->p.y)) {
-        continue;
-      }
-      if ((vertices[i].p.x == v3->p.x) && (vertices[i].p.y == v3->p.y)) {
+      if (vertices[i].p == v->p || vertices[i].p == v1->p || vertices[i].p == v3->p) {
         continue;
       }
       if (IsInside(v1->p, v->p, v3->p, vertices[i].p)) {
@@ -563,11 +548,11 @@ int TPPLPartition::ConvexPartition_HM(TPPLPoly *poly, TPPLPolyList *parts) {
         poly2 = &(*iter2);
 
         for (i21 = 0; i21 < poly2->GetNumPoints(); i21++) {
-          if ((d2.x != poly2->GetPoint(i21).x) || (d2.y != poly2->GetPoint(i21).y)) {
+          if (d2 != poly2->GetPoint(i21)) {
             continue;
           }
           i22 = (i21 + 1) % (poly2->GetNumPoints());
-          if ((d1.x != poly2->GetPoint(i22).x) || (d1.y != poly2->GetPoint(i22).y)) {
+          if (d1 != poly2->GetPoint(i22)) {
             continue;
           }
           isdiagonal = true;
