@@ -35,15 +35,11 @@ TPPLPoly::TPPLPoly() {
 }
 
 TPPLPoly::~TPPLPoly() {
-  if (points) {
-    delete[] points;
-  }
+  delete[] points;
 }
 
 void TPPLPoly::Clear() {
-  if (points) {
-    delete[] points;
-  }
+  delete[] points;
   hole = false;
   numpoints = 0;
   points = NULL;
