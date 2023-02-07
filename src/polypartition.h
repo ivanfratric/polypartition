@@ -211,7 +211,7 @@ public:
     long index2;
 
     Diagonal(const long i1, const long i2) :
-      index1(i1), index2(i2) {}
+            index1(i1), index2(i2) {}
   };
 
 #ifdef TPPL_ALLOCATOR

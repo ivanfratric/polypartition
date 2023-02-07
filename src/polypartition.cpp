@@ -23,9 +23,9 @@
 
 #include "polypartition.h"
 
+#include <algorithm>
 #include <cmath>
 #include <cstring>
-#include <algorithm>
 #include <vector>
 
 TPPLPoly::TPPLPoly() {
@@ -112,7 +112,7 @@ void TPPLPoly::Invert() {
 }
 
 TPPLPartition::PartitionVertex::PartitionVertex() :
-  previous(nullptr), next(nullptr) {
+        previous(nullptr), next(nullptr) {
 }
 
 TPPLPoint TPPLPartition::Normalize(const TPPLPoint &p) {
@@ -352,8 +352,8 @@ void TPPLPartition::UpdateVertexReflexity(PartitionVertex *v) {
 }
 
 void TPPLPartition::UpdateVertex(PartitionVertex *v, const PartitionVertex *vertices, const long numvertices) {
-  const PartitionVertex* v1 = v->previous;
-  const PartitionVertex* v3 = v->next;
+  const PartitionVertex *v1 = v->previous;
+  const PartitionVertex *v3 = v->next;
 
   v->isConvex = IsConvex(v1->p, v->p, v3->p);
 
@@ -859,7 +859,7 @@ void TPPLPartition::TypeB(const long i, const long j, const long k, const Partit
     w += dpstates[i][j].weight + 1;
   }
   if (k - j > 1) {
-    DiagonalList* pairs = &(dpstates[j][k].pairs);
+    DiagonalList *pairs = &(dpstates[j][k].pairs);
 
     auto iter = pairs->begin();
     if ((!pairs->empty()) && (!IsReflex(vertices[i].p, vertices[j].p, vertices[iter->index1].p))) {
@@ -1551,7 +1551,7 @@ int TPPLPartition::TriangulateMonotone(const TPPLPoly *inPoly, TPPLPolyList *tri
   TPPLPoly triangle;
 
   numpoints = inPoly->GetNumPoints();
-  const TPPLPoint* points = inPoly->GetPoints();
+  const TPPLPoint *points = inPoly->GetPoints();
 
   // Trivial case.
   if (numpoints == 3) {
