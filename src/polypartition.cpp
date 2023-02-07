@@ -24,6 +24,7 @@
 #include "polypartition.h"
 
 #include <cmath>
+#include <cstring>
 #include <algorithm>
 #include <vector>
 
@@ -64,7 +65,7 @@ TPPLPoly::TPPLPoly(const TPPLPoly &src) :
 
   if (numpoints > 0) {
     points = new TPPLPoint[numpoints];
-    memcpy(points, src.points, numpoints * sizeof(TPPLPoint));
+    std::memcpy(points, src.points, numpoints * sizeof(TPPLPoint));
   }
 }
 
@@ -75,7 +76,7 @@ TPPLPoly &TPPLPoly::operator=(const TPPLPoly &src) {
 
   if (numpoints > 0) {
     points = new TPPLPoint[numpoints];
-    memcpy(points, src.points, numpoints * sizeof(TPPLPoint));
+    std::memcpy(points, src.points, numpoints * sizeof(TPPLPoint));
   }
 
   return *this;
@@ -786,7 +787,6 @@ int TPPLPartition::Triangulate_OPT(TPPLPoly *poly, TPPLPolyList *triangles) {
 }
 
 void TPPLPartition::UpdateState(const long a, const long b, const long w, const long i, const long j, DPState2 **dpstates) {
-
   const long w2 = dpstates[a][b].weight;
   if (w > w2) {
     return;
