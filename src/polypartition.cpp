@@ -186,7 +186,7 @@ int TPPLPartition::RemoveHoles(TPPLPolyList *inpolys, TPPLPolyList *outpolys) {
   long i, i2, holepointindex, polypointindex;
   TPPLPoint holepoint, polypoint, bestpolypoint;
   TPPLPoint linep1, linep2;
-  TPPLPoint v1, v2;
+  tppl_float v1dist, v2dist;
   TPPLPoly newpoly;
   bool hasholes;
   bool pointvisible;
@@ -252,9 +252,9 @@ int TPPLPartition::RemoveHoles(TPPLPolyList *inpolys, TPPLPolyList *outpolys) {
         }
         polypoint = iter->GetPoint(i);
         if (pointfound) {
-          v1 = Normalize(polypoint - holepoint);
-          v2 = Normalize(bestpolypoint - holepoint);
-          if (v2.x > v1.x) {
+          v1dist = Distance(holepoint, polypoint);
+          v2dist = Distance(holepoint, bestpolypoint);
+          if (v2dist < v1dist) {
             continue;
           }
         }
