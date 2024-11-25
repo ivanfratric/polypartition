@@ -118,7 +118,7 @@ TPPLPartition::PartitionVertex::PartitionVertex() :
 
 TPPLPoint TPPLPartition::Normalize(const TPPLPoint &p) {
   TPPLPoint r;
-  tppl_float n = sqrt(p.x * p.x + p.y * p.y);
+  tppl_float n = tppl_sqrt(p.x * p.x + p.y * p.y);
   if (n != 0) {
     r = p / n;
   } else {
@@ -132,7 +132,7 @@ tppl_float TPPLPartition::Distance(const TPPLPoint &p1, const TPPLPoint &p2) {
   tppl_float dx, dy;
   dx = p2.x - p1.x;
   dy = p2.y - p1.y;
-  return (sqrt(dx * dx + dy * dy));
+  return (tppl_sqrt(dx * dx + dy * dy));
 }
 
 // Checks if two lines intersect.
